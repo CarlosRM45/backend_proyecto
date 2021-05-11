@@ -35,6 +35,7 @@ public class UnidadMedidaServiceImpl implements UnidadMedidaService{
 	public UnidadMedida actualizar(UnidadMedida unidadMedida) {
 		Optional<UnidadMedida> unimed = repository.findById(unidadMedida.getIdUnidadMedida());
 		if(unimed != null) {
+			unidadMedida.setFechaEdita(new Date(System.currentTimeMillis()));
 			return repository.save(unidadMedida);
 		}			
 		return null;

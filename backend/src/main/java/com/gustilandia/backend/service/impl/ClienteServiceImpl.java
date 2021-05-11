@@ -2,11 +2,13 @@ package com.gustilandia.backend.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.model.Cliente;
+import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.repository.RolRepository;
@@ -42,20 +44,22 @@ public class ClienteServiceImpl implements ClienteService{
 	}
 
 	@Override
-	public Cliente actualizar(Cliente t) {
+	public Cliente actualizar(Cliente cliente) {
+		Optional<Cliente> clie = repocliente.findById(cliente.getIdCliente());
+		if(clie != null) {
+			return repocliente.save(cliente);
+		}			
 		return null;
 	}
 
 	@Override
 	public boolean eliminar(Long id) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Cliente buscarId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repocliente.findById(id).get();
 	}
 
 	@Override

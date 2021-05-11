@@ -15,34 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.service.ClienteService;
+import com.gustilandia.backend.model.Venta;
+import com.gustilandia.backend.service.VentaService;
 
 @RestController
-@RequestMapping("/cliente")
-public class ClienteController {
+@RequestMapping("/venta")
+public class VentaController {
 	
 	@Autowired
-	private ClienteService service;
+	private VentaService service;
 	
 	@GetMapping()
-	public ResponseEntity<List<Cliente>> listarUsuarios() {
+	public ResponseEntity<List<Venta>> listarVentas() {
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> buscarId(@PathVariable("id") Long id) {
+	public ResponseEntity<Venta> buscarId(@PathVariable("id") Long id) {
 		
-		Cliente cliente = service.buscarId(id);
-		if(cliente == null)
+		Venta venta = service.buscarId(id);
+		if(venta == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+		return new ResponseEntity<Venta>(venta, HttpStatus.OK);
 		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Cliente> registrarCliente(@RequestBody Cliente cliente) {
-		return new ResponseEntity<>(service.registrar(cliente), HttpStatus.OK);
+	public ResponseEntity<Venta> registrarVenta(@RequestBody Venta venta) {
+		return new ResponseEntity<>(service.registrar(venta), HttpStatus.OK);
 	}
+	
 
 }

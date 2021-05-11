@@ -2,11 +2,13 @@ package com.gustilandia.backend.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.model.Producto;
+import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.repository.CategoriaRepository;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.repository.UnidadMedidaRepository;
@@ -36,20 +38,27 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Override
 	public Producto actualizar(Producto producto) {
-		// TODO Auto-generated method stub
+		Optional<Producto> prod = repository.findById(producto.getIdProducto());
+		if(prod != null) {
+			producto.setFechaEdita(new Date(System.currentTimeMillis()));
+			return repository.save(producto);
+		}			
 		return null;
 	}
 
 	@Override
 	public boolean eliminar(Long id) {
-		// TODO Auto-generated method stub
+		Optional<Producto> prod = repository.findById(id);
+		if(prod != null) {
+			repository.delete(prod.get());
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public Producto buscarId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findById(id).get();
 	}
 
 	@Override
