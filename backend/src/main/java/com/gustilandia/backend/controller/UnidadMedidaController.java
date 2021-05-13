@@ -36,8 +36,7 @@ public class UnidadMedidaController {
 		if(unimed == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<UnidadMedida>(unimed, HttpStatus.OK);
-		
+		return new ResponseEntity<UnidadMedida>(unimed, HttpStatus.OK);		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,8 +51,7 @@ public class UnidadMedidaController {
 		if(_unimed == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<UnidadMedida>(service.actualizar(unimed), HttpStatus.OK);
-		
+		return new ResponseEntity<UnidadMedida>(service.actualizar(unimed), HttpStatus.OK);		
 	}
 
 }
