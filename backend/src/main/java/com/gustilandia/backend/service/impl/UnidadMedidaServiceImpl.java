@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.repository.UnidadMedidaRepository;
 import com.gustilandia.backend.repository.UsuarioRepository;
+import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.UnidadMedidaService;
 
 @Service
@@ -22,43 +23,44 @@ public class UnidadMedidaServiceImpl implements UnidadMedidaService{
 	private UsuarioRepository repositoryUsuario;
 
 	@Override
-	public UnidadMedida registrar(UnidadMedida unidadMedida) {
+	public Response registrar(UnidadMedida unidadMedida) {
 		unidadMedida.setIdUnidadMedida(0L);
 		unidadMedida.setUsuarioCrea(repositoryUsuario.findById(unidadMedida.getUsuarioCrea().getIdUsuario()).get());
 		unidadMedida.setUsuarioEdita(repositoryUsuario.findById(unidadMedida.getUsuarioCrea().getIdUsuario()).get());
-		unidadMedida.setFechaCrea(new Date(System.currentTimeMillis()));;
+		unidadMedida.setFechaCrea(new Date(System.currentTimeMillis()));
 		unidadMedida.setFechaEdita(new Date(System.currentTimeMillis()));
-		return repository.save(unidadMedida);
+
+		return new Response(true, repository.save(unidadMedida), "");
 	}
 
 	@Override
-	public UnidadMedida actualizar(UnidadMedida unidadMedida) {
+	public Response actualizar(UnidadMedida unidadMedida) {
 		Optional<UnidadMedida> unimed = repository.findById(unidadMedida.getIdUnidadMedida());
 		if(unimed != null) {
 			unidadMedida.setFechaEdita(new Date(System.currentTimeMillis()));
-			return repository.save(unidadMedida);
+			return new Response();
 		}			
-		return null;
+		return new Response();
 	}
 
 	@Override
-	public boolean eliminar(Long id) {
+	public Response eliminar(Long id) {
 		Optional<UnidadMedida> unimed = repository.findById(id);
 		if(unimed != null) {
 			repository.delete(unimed.get());
-			return true;
+			return new Response();
 		}
-		return false;
+		return new Response();
 	}
 
 	@Override
-	public UnidadMedida buscarId(Long id) {
-		return repository.findById(id).get();
+	public Response buscarId(Long id) {
+		return new Response();
 	}
 
 	@Override
-	public List<UnidadMedida> listar() {
-		return repository.findAll();
+	public Response listar() {
+		return new Response();
 	}
 
 }

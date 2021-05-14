@@ -10,6 +10,7 @@ import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.model.VentaDetalle;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.repository.VentaRepository;
+import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.VentaService;
 
 @Service
@@ -23,7 +24,7 @@ public class VentaServiceImpl implements VentaService{
 
 	@Transactional
 	@Override
-	public Venta registrar(Venta venta) {
+	public Response registrar(Venta venta) {
 		venta.setIdVenta(0L);
 		
 		double subtotal = 0.0;
@@ -44,29 +45,29 @@ public class VentaServiceImpl implements VentaService{
 		
 		venta = ventarepo.save(venta);
 		
-		return venta;
+		return new Response();
 	}
 
 	@Override
-	public Venta actualizar(Venta venta) {
+	public Response actualizar(Venta venta) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Response();
 	}
 
 	@Override
-	public boolean eliminar(Long id) {
+	public Response eliminar(Long id) {
 		// TODO Auto-generated method stub
-		return false;
+		return new Response();
 	}
 
 	@Override
-	public Venta buscarId(Long id) {
-		return ventarepo.findById(id).get();
+	public Response buscarId(Long id) {
+		return new Response();
 	}
 
 	@Override
-	public List<Venta> listar() {
-		return ventarepo.findAll();
+	public Response listar() {
+		return new Response();
 	}
 
 }

@@ -18,6 +18,7 @@ import com.gustilandia.backend.model.Categoria;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.service.CategoriaService;
+import com.gustilandia.backend.service.Response;
 
 @RestController
 @RequestMapping("/categoria")
@@ -27,46 +28,46 @@ public class CategoriaController {
 	private CategoriaService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Categoria>> listarCategoria() {
+	public ResponseEntity<Response> listarCategoria() {
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Categoria> buscarId(@PathVariable("id") Long id) {
+	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
-		Categoria cat = service.buscarId(id);
+		Response cat = service.buscarId(id);
 		if(cat == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Categoria>(cat, HttpStatus.OK);
+		return new ResponseEntity<Response>(cat, HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/{id}/productos")
-	public ResponseEntity<List<Producto>> buscarProductosCategoria(@PathVariable("id") Long id) {
+	public ResponseEntity<Response> buscarProductosCategoria(@PathVariable("id") Long id) {
 		
-		Categoria cat = service.buscarId(id);
+		Response cat = service.buscarId(id);
 		if(cat == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<List<Producto>>(cat.getProductos(), HttpStatus.OK);
+		return new ResponseEntity<Response>(cat, HttpStatus.OK);
 		
 	}
 	
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Categoria> registrarCategoria(@RequestBody Categoria cat) {
+	public ResponseEntity<Response> registrarCategoria(@RequestBody Categoria cat) {
 		return new ResponseEntity<>(service.registrar(cat), HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Categoria> actualizarId(@RequestBody Categoria categoria) {
+	public ResponseEntity<Response> actualizarId(@RequestBody Categoria categoria) {
 		
-		Categoria _cat = service.buscarId(categoria.getIdCategoria());
+		Response _cat = service.buscarId(categoria.getIdCategoria());
 		if(_cat == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Categoria>(service.actualizar(categoria), HttpStatus.OK);
+		return new ResponseEntity<Response>(service.actualizar(categoria), HttpStatus.OK);
 		
 	}
 	
