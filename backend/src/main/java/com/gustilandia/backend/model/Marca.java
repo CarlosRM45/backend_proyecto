@@ -1,70 +1,60 @@
 package com.gustilandia.backend.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "categoria")
-public class Categoria {
-	
+@Table(name = "marca")
+public class Marca {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idCategoria;
+	private Long idMarca;
 	
-	@Column(name = "categoria")
-	private String categoria;
+	@Column(name = "nombre_marca")
+	private String nombreMarca;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_crea")
 	private Date fechaCrea;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_usuario_crea", nullable = false)
+	@JoinColumn(name = "id_usuario_crea")
 	private Usuario usuarioCrea;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_edita")
-	private Date FechaEdita;
+	private Date fechaEdita;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_usuario_edita")
 	private Usuario usuarioEdita;
-	
-	@Column(name = "id_estado")
-	private int estado;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "categoria")
-	private List<Producto> productos;
 
-	public Long getIdCategoria() {
-		return idCategoria;
+	public Long getIdMarca() {
+		return idMarca;
 	}
 
-	public void setIdCategoria(Long idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setIdMarca(Long idMarca) {
+		this.idMarca = idMarca;
 	}
 
-	public String getCategoria() {
-		return categoria;
+	public String getNombreMarca() {
+		return nombreMarca;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
+	public void setNombreMarca(String nombreMarca) {
+		this.nombreMarca = nombreMarca;
 	}
 
 	public Date getFechaCrea() {
@@ -84,11 +74,11 @@ public class Categoria {
 	}
 
 	public Date getFechaEdita() {
-		return FechaEdita;
+		return fechaEdita;
 	}
 
 	public void setFechaEdita(Date fechaEdita) {
-		FechaEdita = fechaEdita;
+		this.fechaEdita = fechaEdita;
 	}
 
 	public Usuario getUsuarioEdita() {
@@ -98,24 +88,8 @@ public class Categoria {
 	public void setUsuarioEdita(Usuario usuarioEdita) {
 		this.usuarioEdita = usuarioEdita;
 	}
-
-	public int getEstado() {
-		return estado;
-	}
-
-	public void setEstado(int estado) {
-		this.estado = estado;
-	}
-
-	public List<Producto> getProductos() {
-		return productos;
-	}
-
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
-	}
-
-
 	
-
+	
+	
+	
 }

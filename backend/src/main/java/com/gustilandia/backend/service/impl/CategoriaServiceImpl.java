@@ -83,7 +83,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 		Optional<Categoria> cat = repository.findById(id);
 
 		if(cat != null) {
-			return new Response();
+			return new Response(true, cat.get().getProductos(), "");
 		}
 		return new Response();
 	}

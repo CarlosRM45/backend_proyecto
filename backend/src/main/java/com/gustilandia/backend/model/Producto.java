@@ -34,6 +34,10 @@ public class Producto {
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
 	
+	@ManyToOne
+	@JoinColumn(name = "id_marca")
+	private Marca marca;
+	
 	@Column(name = "stock")
 	private int stock;
 	
@@ -154,6 +158,14 @@ public class Producto {
 
 	public void setEstado(int estado) {
 		this.estado = estado;
+	}
+
+	public Marca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(Marca marca) {
+		this.marca = marca;
 	}
 
 	

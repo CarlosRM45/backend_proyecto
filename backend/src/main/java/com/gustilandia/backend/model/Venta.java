@@ -28,12 +28,6 @@ public class Venta {
 	@Column(name = "nro_venta")
 	private int nroVenta;
 	
-	@Column(name = "anio")
-	private String anio;
-	
-	@Column(name = "mes")
-	private String mes;
-	
 	@Column(name = "id_tipo_comprobante_sunat")
 	private Long idTipoComprobanteSunat;
 	
@@ -64,14 +58,6 @@ public class Venta {
 	@Column(name = "id_estado")
 	private Long idEstado;
 	
-	@Column(name = "enviado_sunat")
-	private int enviadoSunat;
-	
-	@Column(name = "aceptado_sunat")
-	private int aceptadoSunat;
-	
-	@Column(name = "anulado_sunat")
-	private int anuladoSunat;
 	
 	@OneToMany(mappedBy = "venta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private List<VentaDetalle> ventaDetalle;
@@ -90,22 +76,6 @@ public class Venta {
 
 	public void setNroVenta(int nroVenta) {
 		this.nroVenta = nroVenta;
-	}
-
-	public String getAnio() {
-		return anio;
-	}
-
-	public void setAnio(String anio) {
-		this.anio = anio;
-	}
-
-	public String getMes() {
-		return mes;
-	}
-
-	public void setMes(String mes) {
-		this.mes = mes;
 	}
 
 	public Long getIdTipoComprobanteSunat() {
@@ -178,30 +148,6 @@ public class Venta {
 
 	public void setIdEstado(Long idEstado) {
 		this.idEstado = idEstado;
-	}
-
-	public int getEnviadoSunat() {
-		return enviadoSunat;
-	}
-
-	public void setEnviadoSunat(int enviadoSunat) {
-		this.enviadoSunat = enviadoSunat;
-	}
-
-	public int getAceptadoSunat() {
-		return aceptadoSunat;
-	}
-
-	public void setAceptadoSunat(int aceptadoSunat) {
-		this.aceptadoSunat = aceptadoSunat;
-	}
-
-	public int getAnuladoSunat() {
-		return anuladoSunat;
-	}
-
-	public void setAnuladoSunat(int anuladoSunat) {
-		this.anuladoSunat = anuladoSunat;
 	}
 
 	public List<VentaDetalle> getVentaDetalle() {
