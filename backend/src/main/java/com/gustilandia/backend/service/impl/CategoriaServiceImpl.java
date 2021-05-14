@@ -12,6 +12,7 @@ import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.repository.CategoriaRepository;
 import com.gustilandia.backend.repository.UsuarioRepository;
 import com.gustilandia.backend.service.CategoriaService;
+import com.gustilandia.backend.service.Response;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService{
@@ -23,51 +24,70 @@ public class CategoriaServiceImpl implements CategoriaService{
 	private UsuarioRepository repositoryUsuario;
 
 	@Override
-	public Categoria registrar(Categoria categoria) {
+	public Response registrar(Categoria categoria) {
 		categoria.setIdCategoria(0L);
 		categoria.setUsuarioCrea(repositoryUsuario.findById(categoria.getUsuarioCrea().getIdUsuario()).get());
 		categoria.setUsuarioEdita(repositoryUsuario.findById(categoria.getUsuarioCrea().getIdUsuario()).get());
 		categoria.setFechaCrea(new Date(System.currentTimeMillis()));;
 		categoria.setFechaEdita(new Date(System.currentTimeMillis()));
-		return repository.save(categoria);
+		  
+		return new Response(true, repository.save(categoria), "");
 	}
 
 	@Override
-	public Categoria actualizar(Categoria categoria) {
+	public Response actualizar(Categoria categoria) {
+
+		Response response = new Response();
+
 		Optional<Categoria> cat = repository.findById(categoria.getIdCategoria());
+
 		if(cat != null) {
-			categoria.setFechaEdita(new Date(System.currentTimeMillis()));
-			return repository.save(categoria);
+
+			cat.get().setFechaEdita(new Date(System.currentTimeMillis()));
+
+			response.setResult(repository.save(cat.get()));
+			response.setSuccess(true);
+			return response;
 		}
-		return null;
+
+		response.setMessage("La categoria no existe.");
+
+		return response;
 	}
 
 	@Override
-	public boolean eliminar(Long id) {
+	public Response eliminar(Long id) {
+
 		Optional<Categoria> cat = repository.findById(id);
+
 		if(cat != null) {
 			repository.delete(cat.get());
-			return true;
+			return new Response();
 		}
-		return false;
+		return new Response();
 	}
 
 	@Override
-	public Categoria buscarId(Long id) {
-		return repository.findById(id).get();
+	public Response buscarId(Long id) {
+		
+		return new Response(true, repository.findById(id).get(), "");
 	}
 
 	@Override
-	public List<Categoria> listar() {
-		return repository.findAll();
+	public Response listar() {
+
+		return new Response(true, repository.findAll(), "");
 	}
 	
-	public List<Producto> listarProductoCategoria(Long id) {
+	@Override
+	public Response listarProductoCategoria(Long id) {
+		
 		Optional<Categoria> cat = repository.findById(id);
+
 		if(cat != null) {
-			return cat.get().getProductos();
+			return new Response();
 		}
-		return null;
+		return new Response();
 	}
 
 }

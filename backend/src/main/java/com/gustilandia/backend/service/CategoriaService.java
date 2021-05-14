@@ -4,4 +4,5 @@ import com.gustilandia.backend.model.Categoria;
 
 public interface CategoriaService extends ICRUD<Categoria>{
 
+    Response listarProductoCategoria(Long id);
 }

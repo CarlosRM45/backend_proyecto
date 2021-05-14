@@ -14,6 +14,7 @@ import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.repository.RolRepository;
 import com.gustilandia.backend.repository.UsuarioRepository;
 import com.gustilandia.backend.service.ClienteService;
+import com.gustilandia.backend.service.Response;
 
 @Service
 public class ClienteServiceImpl implements ClienteService{
@@ -28,8 +29,16 @@ public class ClienteServiceImpl implements ClienteService{
 	private UsuarioRepository repousuario;
 
 	@Override
-	public Cliente registrar(Cliente cliente) {
+	public Response registrar(Cliente cliente) {
 		
+		if(cliente.getNombreCompleto() == null && cliente.getNombreCompleto().trim().length() <= 0){
+			return null;
+		}
+
+		if(cliente.getIdDocumentoIdentidad() == null && cliente.getIdDocumentoIdentidad() == 0L){
+			
+		}
+
 		Usuario usuario = new Usuario();
 		usuario.setIdUsuario(0L);
 		usuario.setUsuario(cliente.getUsuario().getUsuario());
@@ -40,31 +49,41 @@ public class ClienteServiceImpl implements ClienteService{
 		cliente.setIdCliente(0L);
 		cliente.setUsuario(usuario);
 		cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
-		return repocliente.save(cliente);
+
+
+		return new Response(true, repocliente.save(cliente), "");
 	}
 
 	@Override
-	public Cliente actualizar(Cliente cliente) {
+	public Response actualizar(Cliente cliente) {
+
+		Response response = new Response();
+
 		Optional<Cliente> clie = repocliente.findById(cliente.getIdCliente());
+
 		if(clie != null) {
-			return repocliente.save(cliente);
-		}			
-		return null;
+			response.setResult(repocliente.save(cliente));
+			response.setSuccess(true);
+			return response;
+		}
+
+		response.setMessage("El cliente no existe.");
+		return response;
 	}
 
 	@Override
-	public boolean eliminar(Long id) {
-		return false;
+	public Response eliminar(Long id) {
+		return new Response();
 	}
 
 	@Override
-	public Cliente buscarId(Long id) {
-		return repocliente.findById(id).get();
+	public Response buscarId(Long id) {
+		return new Response(true, repocliente.findById(id).get(), "");
 	}
 
 	@Override
-	public List<Cliente> listar() {
-		return repocliente.findAll();
+	public Response listar() {
+		return new Response(true, repocliente.findAll(), "");
 	}
 
 }

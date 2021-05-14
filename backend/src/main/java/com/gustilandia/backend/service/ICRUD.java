@@ -1,17 +1,16 @@
 package com.gustilandia.backend.service;
 
-import java.util.List;
 
 public interface ICRUD<T> {
 	
-	T registrar(T t);
+	Response registrar(T t);
 	
-	T actualizar(T t);
+	Response actualizar(T t);
 	
-	boolean eliminar(Long id);
+	Response eliminar(Long id);
 	
-	T buscarId(Long id);
+	Response buscarId(Long id);
 	
-	List<T> listar();
+	Response listar();
 
 }
