@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,8 +44,9 @@ public class Cliente {
 	@Column(name = "referencia")
 	private String referencia;
 	
-	@Column(name = "id_distrito")
-	private Long idDistrito;
+	@ManyToOne
+	@JoinColumn(name = "id_distrito")
+	private Distrito distrito;
 		
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_usuario")
@@ -121,12 +123,12 @@ public class Cliente {
 		this.referencia = referencia;
 	}
 
-	public Long getIdDistrito() {
-		return idDistrito;
+	public Distrito getDistrito() {
+		return distrito;
 	}
 
-	public void setIdDistrito(Long idDistrito) {
-		this.idDistrito = idDistrito;
+	public void setDistrito(Distrito distrito) {
+		this.distrito = distrito;
 	}
 
 	public Usuario getUsuario() {

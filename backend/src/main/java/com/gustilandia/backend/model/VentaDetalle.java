@@ -27,13 +27,10 @@ public class VentaDetalle {
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 	
-	@Column(name = "impuesto")
-	private Double impuesto;
-	
 	@Column(name = "precio")
 	private Double precio;
 	
-	@Column(name = "procentaje_descuento")
+	@Column(name = "porcentaje_descuento")
 	private Double porcentajeDescuento;
 	
 	@Column(name = "cantidad")
@@ -53,14 +50,6 @@ public class VentaDetalle {
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
-	}
-
-	public Double getImpuesto() {
-		return impuesto;
-	}
-
-	public void setImpuesto(Double impuesto) {
-		this.impuesto = impuesto;
 	}
 
 	public Double getPrecio() {
