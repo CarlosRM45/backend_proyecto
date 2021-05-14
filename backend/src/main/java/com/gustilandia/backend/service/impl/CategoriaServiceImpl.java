@@ -1,14 +1,12 @@
 package com.gustilandia.backend.service.impl;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.model.Categoria;
-import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.repository.CategoriaRepository;
 import com.gustilandia.backend.repository.UsuarioRepository;
 import com.gustilandia.backend.service.CategoriaService;

@@ -1,5 +1,6 @@
 package com.gustilandia.backend.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.model.Cliente;
-import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.ClienteRepository;
-import com.gustilandia.backend.repository.RolRepository;
-import com.gustilandia.backend.repository.UsuarioRepository;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
 
@@ -21,35 +18,47 @@ public class ClienteServiceImpl implements ClienteService{
 	
 	@Autowired
 	private ClienteRepository repocliente;
-	
-	@Autowired
-	private RolRepository reporol;
-	
-	@Autowired
-	private UsuarioRepository repousuario;
 
 	@Override
 	public Response registrar(Cliente cliente) {
 		
-		if(cliente.getNombreCompleto() == null && cliente.getNombreCompleto().trim().length() <= 0){
-			return null;
+		Response response = new Response();
+
+		if(cliente.getNombreCompleto() == null || cliente.getNombreCompleto().trim().length() <= 0){
+			response.setMessage("Ingrese sus nombres y apellidos");
+			return response;
 		}
 
-		if(cliente.getIdDocumentoIdentidad() == null && cliente.getIdDocumentoIdentidad() == 0L){
-			
+		if(cliente.getIdDocumentoIdentidad() == null || cliente.getIdDocumentoIdentidad() == 0L){
+			response.setMessage("Debe seleccionar un documento de identidad");
+			return response;
 		}
 
-		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(0L);
-		usuario.setUsuario(cliente.getUsuario().getUsuario());
-		usuario.setContrasenia(cliente.getUsuario().getContrasenia());
-		usuario.setRol(reporol.findById(2L).get());
-		usuario = repousuario.save(usuario);
+		if(cliente.getNumeroDocumentoIdentidad() == null || cliente.getNumeroDocumentoIdentidad().trim().length() <= 0L){
+			response.setMessage("Debe ingresar su DNI");
+			return response;
+		}
+
+		if(cliente.getNumeroDocumentoIdentidad().trim().length() != 8){
+			response.setMessage("El DNI ingresado es inválido.");
+			return response;
+		}
+
+		if(cliente.getCorreo().trim().length() <= 0  ){
+			response.setMessage("Debe ingresar un correo electrónico");
+			return response;
+		}
+
+		// Usuario usuario = new Usuario();
+		// usuario.setIdUsuario(0L);
 		
-		cliente.setIdCliente(0L);
-		cliente.setUsuario(usuario);
-		cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
+		// usuario.setUsuario(cliente.getUsuario().getUsuario());
+		// usuario.setContrasenia(cliente.getUsuario().getContrasenia());
+		// usuario.setRol(reporol.findById(2L).get());
+		// usuario = repousuario.save(usuario);
+		//cliente.setIdCliente(0L);
 
+		cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
 
 		return new Response(true, repocliente.save(cliente), "");
 	}
@@ -60,14 +69,25 @@ public class ClienteServiceImpl implements ClienteService{
 		Response response = new Response();
 
 		Optional<Cliente> clie = repocliente.findById(cliente.getIdCliente());
+		Cliente _cliente = clie.get();
 
-		if(clie != null) {
-			response.setResult(repocliente.save(cliente));
+		try {
+
+			_cliente.setNombreCompleto(cliente.getNombreCompleto());
+			_cliente.setCelular(cliente.getCelular());
+			_cliente.setCorreo(cliente.getCorreo());
+			_cliente.setDireccion(cliente.getDireccion());
+			_cliente.setIdDistrito(cliente.getIdDistrito());
+			_cliente.setReferencia(cliente.getReferencia());
+
+			
+			response.setResult(repocliente.save(_cliente));
 			response.setSuccess(true);
-			return response;
+
+		} catch (Exception e) {
+			response.setMessage("Hubo un error al actualizar el cliente: "+ e.getMessage());
 		}
 
-		response.setMessage("El cliente no existe.");
 		return response;
 	}
 
@@ -77,13 +97,32 @@ public class ClienteServiceImpl implements ClienteService{
 	}
 
 	@Override
-	public Response buscarId(Long id) {
+	public Response buscarId(Long id) {		
 		return new Response(true, repocliente.findById(id).get(), "");
 	}
 
 	@Override
 	public Response listar() {
-		return new Response(true, repocliente.findAll(), "");
+
+		List<Cliente> listadoClientes = repocliente.findAll();
+		List<Cliente> nuevaListaClientes = new ArrayList<>();
+
+		for (Cliente cliente : listadoClientes) {
+
+			if(cliente.getIdEstado() == 1){
+				nuevaListaClientes.add(cliente);
+			}
+		}
+
+		return new Response(true, nuevaListaClientes , "");
+	}
+
+	@Override
+	public Response iniciarSesion(String correo, String contrasenia) {
+		
+		
+
+		return null;
 	}
 
 }
