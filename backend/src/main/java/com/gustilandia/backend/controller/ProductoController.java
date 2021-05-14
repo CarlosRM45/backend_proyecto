@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.service.ProductoService;
+import com.gustilandia.backend.service.Response;
 
 @RestController
 @RequestMapping("/producto")
@@ -26,34 +27,34 @@ public class ProductoController {
 	private ProductoService service;
 	
 	@GetMapping()
-	public ResponseEntity<List<Producto>> listarUsuarios() {
+	public ResponseEntity<Response> listarUsuarios() {
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Producto> buscarId(@PathVariable("id") Long id) {
+	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
-		Producto producto = service.buscarId(id);
+		Response producto = service.buscarId(id);
 		if(producto == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Producto>(producto, HttpStatus.OK);
+		return new ResponseEntity<Response>(producto, HttpStatus.OK);
 		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Producto> registrarUsuario(@RequestBody Producto producto) {
+	public ResponseEntity<Response> registrarUsuario(@RequestBody Producto producto) {
 		return new ResponseEntity<>(service.registrar(producto), HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Producto> actualizarId(@RequestBody Producto producto) {
+	public ResponseEntity<Response> actualizarId(@RequestBody Producto producto) {
 		
-		Producto _producto = service.buscarId(producto.getIdProducto());
+		Response _producto = service.buscarId(producto.getIdProducto());
 		if(_producto == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Producto>(service.actualizar(producto), HttpStatus.OK);
+		return new ResponseEntity<Response>(service.actualizar(producto), HttpStatus.OK);
 		
 	}
 

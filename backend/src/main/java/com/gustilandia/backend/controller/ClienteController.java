@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.service.ClienteService;
+import com.gustilandia.backend.service.Response;
 
 @RestController
 @RequestMapping("/cliente")
@@ -25,23 +26,23 @@ public class ClienteController {
 	private ClienteService service;
 	
 	@GetMapping()
-	public ResponseEntity<List<Cliente>> listarUsuarios() {
+	public ResponseEntity<Response> listarUsuarios() {
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> buscarId(@PathVariable("id") Long id) {
+	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
-		Cliente cliente = service.buscarId(id);
+		Response cliente = service.buscarId(id);
 		if(cliente == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+		return new ResponseEntity<Response>(cliente, HttpStatus.OK);
 		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Cliente> registrarCliente(@RequestBody Cliente cliente) {
+	public ResponseEntity<Response> registrarCliente(@RequestBody Cliente cliente) {
 		return new ResponseEntity<>(service.registrar(cliente), HttpStatus.OK);
 	}
 

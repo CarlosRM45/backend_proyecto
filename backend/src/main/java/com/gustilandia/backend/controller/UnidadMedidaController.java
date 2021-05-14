@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.model.UnidadMedida;
+import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.UnidadMedidaService;
 
 @RestController
@@ -25,33 +26,33 @@ public class UnidadMedidaController {
 	private UnidadMedidaService service;
 	
 	@GetMapping()
-	public ResponseEntity<List<UnidadMedida>> listarUnidades() {
+	public ResponseEntity<Response> listarUnidades() {
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<UnidadMedida> buscarId(@PathVariable("id") Long id) {
+	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
-		UnidadMedida unimed = service.buscarId(id);
+		Response unimed = service.buscarId(id);
 		if(unimed == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<UnidadMedida>(unimed, HttpStatus.OK);		
+		return new ResponseEntity<Response>(unimed, HttpStatus.OK);		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UnidadMedida> registrarUnidades(@RequestBody UnidadMedida unimed) {
+	public ResponseEntity<Response> registrarUnidades(@RequestBody UnidadMedida unimed) {
 		return new ResponseEntity<>(service.registrar(unimed), HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UnidadMedida> actualizarId(@RequestBody UnidadMedida unimed) {
+	public ResponseEntity<Response> actualizarId(@RequestBody UnidadMedida unimed) {
 		
-		UnidadMedida _unimed = service.buscarId(unimed.getIdUnidadMedida());
+		Response _unimed = service.buscarId(unimed.getIdUnidadMedida());
 		if(_unimed == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<UnidadMedida>(service.actualizar(unimed), HttpStatus.OK);		
+		return new ResponseEntity<Response>(service.actualizar(unimed), HttpStatus.OK);		
 	}
 
 }

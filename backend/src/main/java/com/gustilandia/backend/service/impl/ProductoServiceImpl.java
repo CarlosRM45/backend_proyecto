@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.repository.CategoriaRepository;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.repository.UnidadMedidaRepository;
 import com.gustilandia.backend.service.ProductoService;
+import com.gustilandia.backend.service.Response;
 
 @Service
 public class ProductoServiceImpl implements ProductoService{
@@ -27,43 +27,49 @@ public class ProductoServiceImpl implements ProductoService{
 	private UnidadMedidaRepository repoUniMed;
 	
 	@Override
-	public Producto registrar(Producto producto) {
+	public Response registrar(Producto producto) {
 		producto.setIdProducto(0L);
 		producto.setCategoria(repoCategoria.getOne(producto.getCategoria().getIdCategoria()));
 		producto.setUnidadMedida(repoUniMed.getOne(producto.getUnidadMedida().getIdUnidadMedida()));
 		producto.setFechaCrea(new Date(System.currentTimeMillis()));
 		producto.setFechaEdita(new Date(System.currentTimeMillis()));
-		return repository.save(producto);
+
+		return new Response(true,repository.save(producto), "");
 	}
 
 	@Override
-	public Producto actualizar(Producto producto) {
+	public Response actualizar(Producto producto) {
+		Response response = new Response();
 		Optional<Producto> prod = repository.findById(producto.getIdProducto());
 		if(prod != null) {
 			producto.setFechaEdita(new Date(System.currentTimeMillis()));
-			return repository.save(producto);
-		}			
-		return null;
+			response.setResult(repository.save(producto));
+			response.setSuccess(true);
+
+			return response;
+		}
+
+		return response;
 	}
 
 	@Override
-	public boolean eliminar(Long id) {
+	public Response eliminar(Long id) {
 		Optional<Producto> prod = repository.findById(id);
 		if(prod != null) {
 			repository.delete(prod.get());
-			return true;
+			return new Response();
 		}
-		return false;
+		return new Response();
 	}
 
 	@Override
-	public Producto buscarId(Long id) {
-		return repository.findById(id).get();
+	public Response buscarId(Long id) {
+		return new Response();
 	}
 
 	@Override
-	public List<Producto> listar() {
-		return repository.findAll();
+	public Response listar() {
+		return new Response();
 	}
 
 }
