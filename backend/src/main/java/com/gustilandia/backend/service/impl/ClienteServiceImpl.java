@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import com.gustilandia.backend.dto.DTOCliente;
 import com.gustilandia.backend.model.Cliente;
+import com.gustilandia.backend.model.Distrito;
+import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
@@ -20,67 +24,62 @@ public class ClienteServiceImpl implements ClienteService{
 	private ClienteRepository repocliente;
 
 	@Override
-	public Response registrar(Cliente cliente) {
+	public Response registrar(DTOCliente clienteDto) {
 		
 		Response response = new Response();
+		Cliente cliente = new Cliente();
 
-		if(cliente.getNombreCompleto() == null || cliente.getNombreCompleto().trim().length() <= 0){
+		if(clienteDto.getNombreCompleto() == null || clienteDto.getNombreCompleto().trim().length() <= 0){
 			response.setMessage("Ingrese sus nombres y apellidos");
 			return response;
 		}
 
-		if(cliente.getIdDocumentoIdentidad() == null || cliente.getIdDocumentoIdentidad() == 0L){
+		if(clienteDto.getIdDocumentoIdentidad() == null || clienteDto.getIdDocumentoIdentidad() == 0L){
 			response.setMessage("Debe seleccionar un documento de identidad");
 			return response;
 		}
 
-		if(cliente.getNumeroDocumentoIdentidad() == null || cliente.getNumeroDocumentoIdentidad().trim().length() <= 0L){
+		if(clienteDto.getNumeroDocumentoIdentidad() == null || clienteDto.getNumeroDocumentoIdentidad().trim().length() <= 0L){
 			response.setMessage("Debe ingresar su DNI");
 			return response;
 		}
 
-		if(cliente.getNumeroDocumentoIdentidad().trim().length() != 8){
+		if(clienteDto.getNumeroDocumentoIdentidad().trim().length() != 8){
 			response.setMessage("El DNI ingresado es inválido.");
 			return response;
 		}
 
-		if(cliente.getCorreo().trim().length() <= 0  ){
+		if(clienteDto.getCorreo().trim().length() <= 0  ){
 			response.setMessage("Debe ingresar un correo electrónico");
 			return response;
 		}
 
-		// Usuario usuario = new Usuario();
-		// usuario.setIdUsuario(0L);
-		
-		// usuario.setUsuario(cliente.getUsuario().getUsuario());
-		// usuario.setContrasenia(cliente.getUsuario().getContrasenia());
-		// usuario.setRol(reporol.findById(2L).get());
-		// usuario = repousuario.save(usuario);
-		//cliente.setIdCliente(0L);
+		try {
 
-		cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
+			cliente = repocliente.save(mappingCliente(clienteDto, null));
+			response.setResult(cliente);
+			response.setSuccess(true);
+			
+		} catch (Exception e) {
+			response.setMessage("Hubo un error al guardar el cliente: " + e.getMessage());
+		}
 
-		return new Response(true, repocliente.save(cliente), "");
+
+		return response;
 	}
 
 	@Override
-	public Response actualizar(Cliente cliente) {
+	public Response actualizar(DTOCliente clienteDto) {
 
 		Response response = new Response();
 
-		Optional<Cliente> clie = repocliente.findById(cliente.getIdCliente());
-		Cliente _cliente = clie.get();
-
 		try {
 
-			_cliente.setNombreCompleto(cliente.getNombreCompleto());
-			_cliente.setCelular(cliente.getCelular());
-			_cliente.setCorreo(cliente.getCorreo());
-			_cliente.setDireccion(cliente.getDireccion());
-			_cliente.setIdDistrito(cliente.getIdDistrito());
-			_cliente.setReferencia(cliente.getReferencia());
+			Optional<Cliente> clie = repocliente.findById(clienteDto.getIdCliente());
+			Cliente _cliente = clie.get();
 
-			
+			_cliente = mappingCliente(clienteDto, _cliente);
+
 			response.setResult(repocliente.save(_cliente));
 			response.setSuccess(true);
 
@@ -93,12 +92,37 @@ public class ClienteServiceImpl implements ClienteService{
 
 	@Override
 	public Response eliminar(Long id) {
-		return new Response();
+
+		Response response = new Response();
+
+		try {
+			
+			Optional<Cliente> clienteOp = repocliente.findById(id);
+			Cliente _cliente = clienteOp.get();
+
+			_cliente.getEstado().setIdEstado(2L);
+
+			repocliente.save(_cliente);
+
+			response.setResult(true);
+			response.setMessage("El cliente fue eliminado exitosamente.");
+
+		} catch (Exception e) {
+			response.setMessage("Hubo un error al eliminar el cliente: " + e.getMessage());
+		}
+		
+		return response;
 	}
 
 	@Override
 	public Response buscarId(Long id) {		
-		return new Response(true, repocliente.findById(id).get(), "");
+
+		Cliente cliente = repocliente.findById(id).get();
+
+		if(cliente.getEstado().getIdEstado() == 1)
+			return new Response(false, null, "El cliente no existe.");
+
+		return new Response(true, cliente, "");
 	}
 
 	@Override
@@ -109,7 +133,7 @@ public class ClienteServiceImpl implements ClienteService{
 
 		for (Cliente cliente : listadoClientes) {
 
-			if(cliente.getIdEstado() == 1){
+			if(cliente.getEstado().getIdEstado() == 1){
 				nuevaListaClientes.add(cliente);
 			}
 		}
@@ -120,9 +144,38 @@ public class ClienteServiceImpl implements ClienteService{
 	@Override
 	public Response iniciarSesion(String correo, String contrasenia) {
 		
-		
-
 		return null;
 	}
+
+
+	
+	private Cliente mappingCliente(DTOCliente clienteDto , @Nullable Cliente clienteUpdate){
+
+		Cliente cliente = new Cliente();
+
+		if(clienteUpdate != null)
+			cliente = clienteUpdate;
+
+		cliente.setNombreCompleto(clienteDto.getNombreCompleto());
+		cliente.setCelular(clienteDto.getCelular());
+		cliente.setCorreo(clienteDto.getCorreo());
+		cliente.setDireccion(clienteDto.getDireccion());
+		cliente.setReferencia(clienteDto.getReferencia());
+
+		Distrito distrito = new Distrito();
+		distrito.setIdDistrito(clienteDto.getIdDistrito());
+		cliente.setDistrito(distrito);
+
+		Estado estado = new Estado();
+		estado.setIdEstado(1L);
+		cliente.setEstado(estado);
+
+		if(clienteDto.getIdCliente() == 0)
+			cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
+		
+		
+		return cliente;
+	}
+
 
 }

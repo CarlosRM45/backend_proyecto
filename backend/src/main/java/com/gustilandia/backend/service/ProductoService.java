@@ -1,7 +1,7 @@
 package com.gustilandia.backend.service;
 
-import com.gustilandia.backend.model.Producto;
+import com.gustilandia.backend.dto.DTOProducto;
 
-public interface ProductoService extends ICRUD<Producto>{
+public interface ProductoService extends ICRUD<DTOProducto>{
 
 }

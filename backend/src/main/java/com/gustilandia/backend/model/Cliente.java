@@ -56,8 +56,17 @@ public class Cliente {
 	@Column(name = "fecha_creacion")
 	private Date fechaCreacion;
 	
-	@Column(name = "id_estado")
-	private Long idEstado;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_estado")
+	private Estado estado;
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
 
 	public long getIdCliente() {
 		return idCliente;
@@ -146,14 +155,5 @@ public class Cliente {
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
-
-	public Long getIdEstado() {
-		return idEstado;
-	}
-
-	public void setIdEstado(Long idEstado) {
-		this.idEstado = idEstado;
-	}
-
 	
 }

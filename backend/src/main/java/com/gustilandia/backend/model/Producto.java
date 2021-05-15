@@ -58,11 +58,20 @@ public class Producto {
 	private Date fechaEdita;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_usuario_edita", nullable = false)
+	@JoinColumn(name = "id_usuario_edita", nullable = true)
 	private Usuario usuarioEdita;
 	
-	@Column(name = "id_estado")
-	private int estado;
+	@ManyToOne
+	@JoinColumn(name = "is_estado", nullable = false)
+	private Estado estado;
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
 
 	public Long getIdProducto() {
 		return idProducto;
@@ -150,14 +159,6 @@ public class Producto {
 
 	public void setUsuarioEdita(Usuario usuarioEdita) {
 		this.usuarioEdita = usuarioEdita;
-	}
-
-	public int getEstado() {
-		return estado;
-	}
-
-	public void setEstado(int estado) {
-		this.estado = estado;
 	}
 
 	public Marca getMarca() {
