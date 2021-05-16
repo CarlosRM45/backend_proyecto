@@ -25,8 +25,8 @@ public class Venta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idVenta;
 	
-	@Column(name = "nro_venta")
-	private int nroVenta;
+	@Column(name = "numero_venta")
+	private int numeroVenta;
 	
 	@Column(name = "id_tipo_comprobante_sunat")
 	private Long idTipoComprobanteSunat;
@@ -38,7 +38,7 @@ public class Venta {
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tarjeta")
 	private Tarjeta tarjeta;
 	
@@ -71,11 +71,11 @@ public class Venta {
 	}
 
 	public int getNroVenta() {
-		return nroVenta;
+		return numeroVenta;
 	}
 
-	public void setNroVenta(int nroVenta) {
-		this.nroVenta = nroVenta;
+	public void setNroVenta(int numeroVenta) {
+		this.numeroVenta = numeroVenta;
 	}
 
 	public Long getIdTipoComprobanteSunat() {

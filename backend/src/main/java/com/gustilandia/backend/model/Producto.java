@@ -62,7 +62,7 @@ public class Producto {
 	private Usuario usuarioEdita;
 	
 	@ManyToOne
-	@JoinColumn(name = "is_estado", nullable = false)
+	@JoinColumn(name = "id_estado", nullable = false)
 	private Estado estado;
 
 	public Estado getEstado() {

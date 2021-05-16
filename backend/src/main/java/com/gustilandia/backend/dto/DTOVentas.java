@@ -5,6 +5,7 @@ import java.util.List;
 
 public class DTOVentas implements Serializable{
 	
+	private Long idVenta;
 	private int nroVenta;
 	private Long idTipoComprobanteSunat;
 	private String correlativoComprobante;
@@ -15,8 +16,12 @@ public class DTOVentas implements Serializable{
 	public DTOVentas() {
 	}
 	
-	public DTOVentas(int nroVenta, Long idTipoComprobanteSunat, String correlativoComprobante, Long idCliente,
-			DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
+
+
+
+	public DTOVentas(Long idVenta, int nroVenta, Long idTipoComprobanteSunat, String correlativoComprobante,
+			Long idCliente, DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
+		this.idVenta = idVenta;
 		this.nroVenta = nroVenta;
 		this.idTipoComprobanteSunat = idTipoComprobanteSunat;
 		this.correlativoComprobante = correlativoComprobante;
@@ -24,7 +29,24 @@ public class DTOVentas implements Serializable{
 		this.tarjeta = tarjeta;
 		this.detalleVenta = detalleVenta;
 	}
-	
+
+
+
+
+
+
+	public Long getIdVenta() {
+		return idVenta;
+	}
+
+
+
+	public void setIdVenta(Long idVenta) {
+		this.idVenta = idVenta;
+	}
+
+
+
 	public List<DTODetalleVenta> getDetalleVenta() {
 		return detalleVenta;
 	}
