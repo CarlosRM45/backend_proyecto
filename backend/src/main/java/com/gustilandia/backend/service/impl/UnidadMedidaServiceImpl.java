@@ -1,7 +1,6 @@
 package com.gustilandia.backend.service.impl;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;

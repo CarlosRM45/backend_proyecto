@@ -1,7 +1,5 @@
 package com.gustilandia.backend.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.dto.DTOProducto;
-import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
 
@@ -29,7 +25,7 @@ public class ProductoController {
 	private ProductoService service;
 	
 	@GetMapping()
-	public ResponseEntity<Response> listarUsuarios() {
+	public ResponseEntity<Response> listarProductos() {
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
@@ -45,12 +41,12 @@ public class ProductoController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> registrarUsuario(@RequestBody DTOProducto producto) {
+	public ResponseEntity<Response> registrarProducto(@RequestBody DTOProducto producto) {
 		return new ResponseEntity<>(service.registrar(producto), HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> actualizarId(@RequestBody DTOProducto producto) {
+	public ResponseEntity<Response> actualizarProducto(@RequestBody DTOProducto producto) {
 		
 		Response _producto = service.buscarId(producto.getIdProducto());
 

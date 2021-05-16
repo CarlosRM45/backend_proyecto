@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Autowired
 	private ProductoRepository repository;
+	
+	@Autowired
+	private ModelMapper mapper;
 	
 	@Autowired
 	private CategoriaRepository repoCategoria;
@@ -136,7 +141,7 @@ public class ProductoServiceImpl implements ProductoService{
 
 		Producto producto = repository.findById(id).get();
 
-		if(producto.getEstado().getIdEstado() == 1)
+		if(producto.getEstado().getIdEstado() != 1)
 			return new Response(false, null, "El Producto no existe.");
 
 		return new Response(true, producto, "");
@@ -145,23 +150,17 @@ public class ProductoServiceImpl implements ProductoService{
 	@Override
 	public Response listar() {
 		
-		List<Producto> listadoProductos = repository.findAll();
-		List<Producto> nuevaListaProductos= new ArrayList<>();
+		List<Producto> listadoProductos = repository.findAll().stream()
+				.filter(producto -> producto.getEstado().getIdEstado() == 1)
+				.collect(Collectors.toList());
 
-		for (Producto producto : listadoProductos) {
-
-			if(producto.getEstado().getIdEstado() == 1){
-				nuevaListaProductos.add(producto);
-			}
-		}
-
-		return new Response(true, nuevaListaProductos , "");
+		return new Response(true, listadoProductos , "");
 	}
 
 	
 	private Producto mappingProducto(DTOProducto productoDto , @Nullable Producto productoUpdate){
 
-		Producto producto = new Producto();
+		/*Producto producto = new Producto();
 
 		if(productoUpdate != null)
 			producto = productoUpdate;
@@ -184,26 +183,28 @@ public class ProductoServiceImpl implements ProductoService{
 		usuario.setIdUsuario(productoDto.getIdUsuarioCrea());
 
 		Estado estado = new Estado();
-		estado.setIdEstado(1L);
-
+		estado.setIdEstado(1L);*/
+		
+		Producto producto = mapper.map(productoDto, Producto.class);
+		producto.getEstado().setIdEstado(1L);
 
 
 		if(productoDto.getIdProducto() != 0){
 
-			usuario.setIdUsuario(productoDto.getIdUsuarioEdita());
+			//usuario.setIdUsuario(productoDto.getIdUsuarioEdita());
 			producto.setFechaEdita(new Date(System.currentTimeMillis()));
-			producto.setUsuarioEdita(usuario);
+			//producto.setUsuarioEdita(usuario);
 		}
 		else{
 
 			producto.setFechaCrea(new Date(System.currentTimeMillis()));
-			producto.setUsuarioCrea(usuario);
+			//producto.setUsuarioCrea(usuario);
 		}
 
-		producto.setCategoria(categoria);
-		producto.setMarca(marca);
-		producto.setUnidadMedida(unidadMedida);
-		producto.setEstado(estado);
+		//producto.setCategoria(categoria);
+		//producto.setMarca(marca);
+		//producto.setUnidadMedida(unidadMedida);
+		//producto.setEstado(estado);
 
 		return producto;
 	}

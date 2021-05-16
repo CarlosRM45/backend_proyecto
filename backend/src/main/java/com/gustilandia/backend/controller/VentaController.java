@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gustilandia.backend.dto.DTOVentas;
 import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.Venta;
@@ -43,7 +44,7 @@ public class VentaController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> registrarVenta(@RequestBody Venta venta) {
+	public ResponseEntity<Response> registrarVenta(@RequestBody DTOVentas venta) {
 		return new ResponseEntity<>(service.registrar(venta), HttpStatus.OK);
 	}
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -128,27 +129,15 @@ public class ClienteServiceImpl implements ClienteService{
 	@Override
 	public Response listar() {
 
-		List<Cliente> listadoClientes = repocliente.findAll();
-		List<Cliente> nuevaListaClientes = new ArrayList<>();
+		List<Cliente> listadoClientes = repocliente.findAll()
+				.stream()
+				.filter(cliente -> cliente.getEstado().getIdEstado() == 1)
+				.collect(Collectors.toList());
 
-		for (Cliente cliente : listadoClientes) {
-
-			if(cliente.getEstado().getIdEstado() == 1){
-				nuevaListaClientes.add(cliente);
-			}
-		}
-
-		return new Response(true, nuevaListaClientes , "");
-	}
-
-	@Override
-	public Response iniciarSesion(String correo, String contrasenia) {
-		
-		return null;
+		return new Response(true, listadoClientes , "");
 	}
 
 
-	
 	private Cliente mappingCliente(DTOCliente clienteDto , @Nullable Cliente clienteUpdate){
 
 		Cliente cliente = new Cliente();
