@@ -101,11 +101,14 @@ public class ClienteServiceImpl implements ClienteService{
 			Optional<Cliente> clienteOp = repocliente.findById(id);
 			Cliente _cliente = clienteOp.get();
 
-			_cliente.getEstado().setIdEstado(2L);
+			// _cliente.getEstado().setIdEstado(2L);
 
-			repocliente.save(_cliente);
+			// repocliente.save(_cliente);
 
-			response.setResult(true);
+
+			int d = repocliente.deleteCliente(id);
+
+			response.setSuccess(true);
 			response.setMessage("El cliente fue eliminado exitosamente.");
 
 		} catch (Exception e) {
@@ -120,7 +123,7 @@ public class ClienteServiceImpl implements ClienteService{
 
 		Cliente cliente = repocliente.findById(id).get();
 
-		if(cliente.getEstado().getIdEstado() == 1)
+		if(cliente.getEstado().getIdEstado() != 1)
 			return new Response(false, null, "El cliente no existe.");
 
 		return new Response(true, cliente, "");
