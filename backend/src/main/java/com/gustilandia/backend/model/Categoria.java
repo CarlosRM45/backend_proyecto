@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,14 +40,14 @@ public class Categoria {
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_edita")
-	private Date FechaEdita;
+	private Date fechaEdita;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_edita")
 	private Usuario usuarioEdita;
 	
 	@Column(name = "id_estado")
-	private int estado;
+	private Long idEstado;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "categoria")
@@ -84,11 +86,11 @@ public class Categoria {
 	}
 
 	public Date getFechaEdita() {
-		return FechaEdita;
+		return fechaEdita;
 	}
 
 	public void setFechaEdita(Date fechaEdita) {
-		FechaEdita = fechaEdita;
+		this.fechaEdita = fechaEdita;
 	}
 
 	public Usuario getUsuarioEdita() {
@@ -99,12 +101,12 @@ public class Categoria {
 		this.usuarioEdita = usuarioEdita;
 	}
 
-	public int getEstado() {
-		return estado;
+	public Long getIdEstado() {
+		return idEstado;
 	}
 
-	public void setEstado(int estado) {
-		this.estado = estado;
+	public void setIdEstado(Long idEstado) {
+		this.idEstado = idEstado;
 	}
 
 	public List<Producto> getProductos() {

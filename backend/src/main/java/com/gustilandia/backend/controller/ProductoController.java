@@ -1,5 +1,7 @@
 package com.gustilandia.backend.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,12 +43,12 @@ public class ProductoController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> registrarProducto(@RequestBody DTOProducto producto) {
+	public ResponseEntity<Response> registrarProducto(@RequestBody @Valid DTOProducto producto) {
 		return new ResponseEntity<>(service.registrar(producto), HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> actualizarProducto(@RequestBody DTOProducto producto) {
+	public ResponseEntity<Response> actualizarProducto(@RequestBody @Valid DTOProducto producto) {
 		
 		Response _producto = service.buscarId(producto.getIdProducto());
 
