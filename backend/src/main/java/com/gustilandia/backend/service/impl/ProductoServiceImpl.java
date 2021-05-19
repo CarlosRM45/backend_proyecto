@@ -1,6 +1,6 @@
 package com.gustilandia.backend.service.impl;
 
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -11,17 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import com.gustilandia.backend.dto.DTOCliente;
 import com.gustilandia.backend.dto.DTOProducto;
-import com.gustilandia.backend.model.Categoria;
-import com.gustilandia.backend.model.Estado;
-import com.gustilandia.backend.model.Marca;
 import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.model.UnidadMedida;
-import com.gustilandia.backend.model.Usuario;
-import com.gustilandia.backend.repository.CategoriaRepository;
 import com.gustilandia.backend.repository.ProductoRepository;
-import com.gustilandia.backend.repository.UnidadMedidaRepository;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
 
@@ -34,18 +26,12 @@ public class ProductoServiceImpl implements ProductoService{
 	@Autowired
 	private ModelMapper mapper;
 	
-	@Autowired
-	private CategoriaRepository repoCategoria;
-	
-	@Autowired
-	private UnidadMedidaRepository repoUniMed;
-	
 	@Override
 	public Response registrar(DTOProducto productoDto) {
 		
 		Response response = new Response();
 		Producto producto = new Producto();
-/*
+
 		if(productoDto.getProducto() == null || productoDto.getProducto().trim().length() <= 0){
 			response.setMessage("Ingrese el nombre del producto.");
 			return response;
@@ -75,11 +61,11 @@ public class ProductoServiceImpl implements ProductoService{
 			response.setMessage("Seleccione una unidad de medida.");
 			return response;
 		}
-*/
+
 		
 		try {
 
-			producto = repository.save(mappingProducto(productoDto, null));
+			producto = repository.save(mappingProducto(productoDto));
 			response.setResult(producto);
 			response.setSuccess(true);
 			
@@ -94,13 +80,21 @@ public class ProductoServiceImpl implements ProductoService{
 	public Response actualizar(DTOProducto productoDto) {
 
 		Response response = new Response();
+		Producto producto = mappingProducto(productoDto);
 
 		try {
 
 			Optional<Producto> prod = repository.findById(productoDto.getIdProducto());
 			Producto _producto = prod.get();
 
-			_producto = mappingProducto(productoDto, _producto);
+			_producto.setDescripcion(producto.getDescripcion());
+			_producto.setProducto(producto.getProducto());
+			_producto.setImagen(producto.getImagen());
+			_producto.setPrecio(producto.getPrecio());
+			_producto.setCategoria(producto.getCategoria());
+			_producto.setMarca(producto.getMarca());
+			_producto.setStock(producto.getStock());
+			_producto.setUnidadMedida(producto.getUnidadMedida());
 
 			response.setResult(repository.save(_producto));
 			response.setSuccess(true);
@@ -119,14 +113,8 @@ public class ProductoServiceImpl implements ProductoService{
 
 		try {
 			
-			Optional<Producto> productoOp = repository.findById(id);
-			Producto _producto = productoOp.get();
-
-			_producto.getEstado().setIdEstado(2L);
-
-			repository.save(_producto);
-
-			response.setResult(true);
+			repository.deleteProducto(id);
+			response.setSuccess(true);
 			response.setMessage("El producto fue eliminado exitosamente.");
 
 		} catch (Exception e) {
@@ -158,7 +146,7 @@ public class ProductoServiceImpl implements ProductoService{
 	}
 
 	
-	private Producto mappingProducto(DTOProducto productoDto , @Nullable Producto productoUpdate){
+	private Producto mappingProducto(DTOProducto productoDto){
 
 		Producto producto = mapper.map(productoDto, Producto.class);
 		producto.getEstado().setIdEstado(1L);

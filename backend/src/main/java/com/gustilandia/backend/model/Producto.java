@@ -29,6 +29,9 @@ public class Producto {
 	
 	@Column(name = "precio")
 	private Double precio;
+
+	@Column(name = "imagen")
+	private String imagen;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")
@@ -64,6 +67,16 @@ public class Producto {
 	@ManyToOne
 	@JoinColumn(name = "id_estado", nullable = false)
 	private Estado estado;
+
+
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
+
 
 	public Estado getEstado() {
 		return estado;
