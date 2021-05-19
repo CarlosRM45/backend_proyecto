@@ -26,8 +26,9 @@ public class Cliente {
 	@Column(name = "nombre_completo")
 	private String nombreCompleto;
 	
-	@Column(name = "id_documento_identidad")
-	private Long idDocumentoIdentidad;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_documento_identidad")
+	private DocumentoIdentidad documentoIdentidad;
 	
 	@Column(name = "numero_documento_identidad")
 	private String numeroDocumentoIdentidad;
@@ -84,12 +85,12 @@ public class Cliente {
 		this.nombreCompleto = nombreCompleto;
 	}
 
-	public Long getIdDocumentoIdentidad() {
-		return idDocumentoIdentidad;
+	public DocumentoIdentidad getDocumentoIdentidad() {
+		return documentoIdentidad;
 	}
 
-	public void setIdDocumentoIdentidad(Long idDocumentoIdentidad) {
-		this.idDocumentoIdentidad = idDocumentoIdentidad;
+	public void setDocumentoIdentidad(DocumentoIdentidad documentoIdentidad) {
+		this.documentoIdentidad = documentoIdentidad;
 	}
 
 	public String getNumeroDocumentoIdentidad() {

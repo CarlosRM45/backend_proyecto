@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCliente;
@@ -23,6 +24,9 @@ public class ClienteServiceImpl implements ClienteService{
 	
 	@Autowired
 	private ClienteRepository repocliente;
+
+	@Autowired
+	private ModelMapper mapper;
 
 	@Override
 	public Response registrar(DTOCliente clienteDto) {
@@ -57,7 +61,7 @@ public class ClienteServiceImpl implements ClienteService{
 
 		try {
 
-			cliente = repocliente.save(mappingCliente(clienteDto, null));
+			cliente = repocliente.save(mappingCliente(clienteDto));
 			response.setResult(cliente);
 			response.setSuccess(true);
 			
@@ -73,14 +77,20 @@ public class ClienteServiceImpl implements ClienteService{
 	public Response actualizar(DTOCliente clienteDto) {
 
 		Response response = new Response();
+		Cliente cliente = mappingCliente(clienteDto);
 
 		try {
 
 			Optional<Cliente> clie = repocliente.findById(clienteDto.getIdCliente());
 			Cliente _cliente = clie.get();
 
-			_cliente = mappingCliente(clienteDto, _cliente);
-
+			_cliente.setNombreCompleto(cliente.getNombreCompleto());
+			_cliente.setCelular(cliente.getCelular());
+			_cliente.setCorreo(cliente.getCorreo());
+			_cliente.setDireccion(cliente.getDireccion());
+			_cliente.setReferencia(cliente.getReferencia());
+			_cliente.setDistrito(cliente.getDistrito());
+	
 			response.setResult(repocliente.save(_cliente));
 			response.setSuccess(true);
 
@@ -98,16 +108,7 @@ public class ClienteServiceImpl implements ClienteService{
 
 		try {
 			
-			Optional<Cliente> clienteOp = repocliente.findById(id);
-			Cliente _cliente = clienteOp.get();
-
-			// _cliente.getEstado().setIdEstado(2L);
-
-			// repocliente.save(_cliente);
-
-
-			int d = repocliente.deleteCliente(id);
-
+			repocliente.deleteCliente(id);
 			response.setSuccess(true);
 			response.setMessage("El cliente fue eliminado exitosamente.");
 
@@ -140,27 +141,12 @@ public class ClienteServiceImpl implements ClienteService{
 		return new Response(true, listadoClientes , "");
 	}
 
+	
+	private Cliente mappingCliente(DTOCliente clienteDto){
 
-	private Cliente mappingCliente(DTOCliente clienteDto , @Nullable Cliente clienteUpdate){
+		Cliente cliente = mapper.map(clienteDto, Cliente.class);
+		cliente.getEstado().setIdEstado(1L);
 
-		Cliente cliente = new Cliente();
-
-		if(clienteUpdate != null)
-			cliente = clienteUpdate;
-
-		cliente.setNombreCompleto(clienteDto.getNombreCompleto());
-		cliente.setCelular(clienteDto.getCelular());
-		cliente.setCorreo(clienteDto.getCorreo());
-		cliente.setDireccion(clienteDto.getDireccion());
-		cliente.setReferencia(clienteDto.getReferencia());
-
-		Distrito distrito = new Distrito();
-		distrito.setIdDistrito(clienteDto.getIdDistrito());
-		cliente.setDistrito(distrito);
-
-		Estado estado = new Estado();
-		estado.setIdEstado(1L);
-		cliente.setEstado(estado);
 
 		if(clienteDto.getIdCliente() == 0)
 			cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
@@ -168,6 +154,4 @@ public class ClienteServiceImpl implements ClienteService{
 		
 		return cliente;
 	}
-
-
 }

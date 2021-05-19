@@ -160,52 +160,17 @@ public class ProductoServiceImpl implements ProductoService{
 	
 	private Producto mappingProducto(DTOProducto productoDto , @Nullable Producto productoUpdate){
 
-		/*Producto producto = new Producto();
-
-		if(productoUpdate != null)
-			producto = productoUpdate;
-
-		producto.setProducto(productoDto.getProducto());
-		producto.setDescripcion(productoDto.getDescripcion());
-		producto.setPrecio(productoDto.getPrecio());
-		producto.setStock(productoDto.getStock());
-		
-		Categoria categoria = new Categoria();
-		categoria.setIdCategoria(productoDto.getIdCategoria());
-
-		Marca marca = new Marca();
-		marca.setIdMarca(productoDto.getIdMarca());
-
-		UnidadMedida unidadMedida = new UnidadMedida();
-		unidadMedida.setIdUnidadMedida(productoDto.getIdUnidadMedida());
-
-		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(productoDto.getIdUsuarioCrea());
-
-		Estado estado = new Estado();
-		estado.setIdEstado(1L);*/
-		
 		Producto producto = mapper.map(productoDto, Producto.class);
 		producto.getEstado().setIdEstado(1L);
 
 
 		if(productoDto.getIdProducto() != 0){
-
-			//usuario.setIdUsuario(productoDto.getIdUsuarioEdita());
 			producto.setFechaEdita(new Date(System.currentTimeMillis()));
-			//producto.setUsuarioEdita(usuario);
 		}
 		else{
-
 			producto.setFechaCrea(new Date(System.currentTimeMillis()));
-			//producto.setUsuarioCrea(usuario);
 		}
-
-		//producto.setCategoria(categoria);
-		//producto.setMarca(marca);
-		//producto.setUnidadMedida(unidadMedida);
-		//producto.setEstado(estado);
-
+		
 		return producto;
 	}
 
