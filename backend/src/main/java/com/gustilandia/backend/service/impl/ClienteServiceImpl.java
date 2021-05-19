@@ -33,7 +33,7 @@ public class ClienteServiceImpl implements ClienteService{
 		
 		Response response = new Response();
 		Cliente cliente = new Cliente();
-
+/*
 		if(clienteDto.getNombreCompleto() == null || clienteDto.getNombreCompleto().trim().length() <= 0){
 			response.setMessage("Ingrese sus nombres y apellidos");
 			return response;
@@ -58,7 +58,7 @@ public class ClienteServiceImpl implements ClienteService{
 			response.setMessage("Debe ingresar un correo electrónico");
 			return response;
 		}
-
+*/
 		try {
 
 			cliente = repocliente.save(mappingCliente(clienteDto));

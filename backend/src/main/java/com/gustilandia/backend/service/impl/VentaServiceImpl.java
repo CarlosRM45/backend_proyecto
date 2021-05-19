@@ -93,8 +93,27 @@ public class VentaServiceImpl implements VentaService{
 
 	@Override
 	public Response eliminar(Long id) {
-		// TODO Auto-generated method stub
-		return new Response();
+		
+		Response response = new Response();
+		
+		try {
+			Optional<Venta> ventaOpt = ventarepo.findById(id);
+			
+			if(ventaOpt != null) {
+				Venta venta = ventaOpt.get();
+				venta.setIdEstado(2L);
+				ventarepo.save(venta);
+				
+				response.setSuccess(true);
+				response.setMessage("La venta ha sido eliminada");
+			}else {
+				response.setMessage("La venta no existe");
+			}
+			
+		} catch (Exception e) {
+			response.setMessage("Hubo un error al eliminar la venta: " + e.getMessage());
+		}
+		return response;
 	}
 
 	@Override

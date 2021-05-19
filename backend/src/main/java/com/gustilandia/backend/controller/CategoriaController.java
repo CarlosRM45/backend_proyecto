@@ -2,6 +2,8 @@ package com.gustilandia.backend.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gustilandia.backend.dto.DTOCategoria;
 import com.gustilandia.backend.model.Categoria;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.UnidadMedida;
@@ -56,12 +59,12 @@ public class CategoriaController {
 	
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> registrarCategoria(@RequestBody Categoria cat) {
+	public ResponseEntity<Response> registrarCategoria(@RequestBody @Valid DTOCategoria cat) {
 		return new ResponseEntity<>(service.registrar(cat), HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> actualizarId(@RequestBody Categoria categoria) {
+	public ResponseEntity<Response> actualizarId(@RequestBody @Valid DTOCategoria categoria) {
 		
 		Response _cat = service.buscarId(categoria.getIdCategoria());
 		if(_cat == null)
@@ -70,7 +73,6 @@ public class CategoriaController {
 		return new ResponseEntity<Response>(service.actualizar(categoria), HttpStatus.OK);
 		
 	}
-	
 	
 
 }

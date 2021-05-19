@@ -2,6 +2,8 @@ package com.gustilandia.backend.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class DTOTarjeta {
 	
 	private String nroTarjeta;

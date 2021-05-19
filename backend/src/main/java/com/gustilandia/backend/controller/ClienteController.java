@@ -1,5 +1,7 @@
 package com.gustilandia.backend.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,7 +45,7 @@ public class ClienteController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> registrarCliente(@RequestBody DTOCliente cliente) {
+	public ResponseEntity<Response> registrarCliente(@RequestBody @Valid DTOCliente cliente) {
 		return new ResponseEntity<>(service.registrar(cliente), HttpStatus.OK);
 	}
 

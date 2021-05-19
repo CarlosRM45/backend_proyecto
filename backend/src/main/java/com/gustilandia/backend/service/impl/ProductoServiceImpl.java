@@ -45,7 +45,7 @@ public class ProductoServiceImpl implements ProductoService{
 		
 		Response response = new Response();
 		Producto producto = new Producto();
-
+/*
 		if(productoDto.getProducto() == null || productoDto.getProducto().trim().length() <= 0){
 			response.setMessage("Ingrese el nombre del producto.");
 			return response;
@@ -75,7 +75,7 @@ public class ProductoServiceImpl implements ProductoService{
 			response.setMessage("Seleccione una unidad de medida.");
 			return response;
 		}
-
+*/
 		
 		try {
 
