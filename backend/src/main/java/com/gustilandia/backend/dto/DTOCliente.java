@@ -33,16 +33,6 @@ public class DTOCliente {
 
     private Long idDistrito;
 
-    public Long getIdEstado() {
-        return idEstado;
-    }
-
-    public void setIdEstado(Long idEstado) {
-        this.idEstado = idEstado;
-    }
-
-    private Long idEstado;
-
     public Long getIdDistrito() {
         return idDistrito;
     }

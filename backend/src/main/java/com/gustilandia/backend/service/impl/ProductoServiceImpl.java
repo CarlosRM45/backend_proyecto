@@ -12,6 +12,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOProducto;
+import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.service.ProductoService;
@@ -149,7 +150,9 @@ public class ProductoServiceImpl implements ProductoService{
 	private Producto mappingProducto(DTOProducto productoDto){
 
 		Producto producto = mapper.map(productoDto, Producto.class);
-		producto.getEstado().setIdEstado(1L);
+		Estado estado = new Estado();
+		estado.setIdEstado(1L);
+		producto.setEstado(estado);
 
 
 		if(productoDto.getIdProducto() != 0){

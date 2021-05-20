@@ -38,19 +38,8 @@ public class DTOProducto {
     private Long idUnidadMedida;
 	
 	private int stock;
-	
-	private Date fechaCrea;
-	
+
 	private Long idUsuarioCrea;
-
-    @Nullable
-	private Date fechaEdita;
-	
-    @Nullable
-	private Long idUsuarioEdita;
-
-	private Long estado;
-    
 
     public Long getIdProducto() {
         return idProducto;
@@ -116,14 +105,6 @@ public class DTOProducto {
         this.idUnidadMedida = idUnidadMedida;
     }
 
-    public Date getFechaCrea() {
-        return fechaCrea;
-    }
-
-    public void setFechaCrea(Date fechaCrea) {
-        this.fechaCrea = fechaCrea;
-    }
-
     public Long getIdUsuarioCrea() {
         return idUsuarioCrea;
     }
@@ -131,30 +112,5 @@ public class DTOProducto {
     public void setIdUsuarioCrea(Long idUsuarioCrea) {
         this.idUsuarioCrea = idUsuarioCrea;
     }
-
-    public Date getFechaEdita() {
-        return fechaEdita;
-    }
-
-    public void setFechaEdita(Date fechaEdita) {
-        this.fechaEdita = fechaEdita;
-    }
-
-    public Long getIdUsuarioEdita() {
-        return idUsuarioEdita;
-    }
-
-    public void setIdUsuarioEdita(Long idUsuarioEdita) {
-        this.idUsuarioEdita = idUsuarioEdita;
-    }
-
-    public Long getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Long estado) {
-        this.estado = estado;
-    }
-
     
 }
