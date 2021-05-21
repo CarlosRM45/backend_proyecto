@@ -1,38 +1,41 @@
 package com.gustilandia.backend.dto;
 
-import java.util.Date;
-
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.lang.Nullable;
 
 public class DTOProducto {
     
     private Long idProducto;
-
+    
+    @NotBlank(message = "Debe ingresar un nombre del producto")
     @NotNull(message = "Debe ingresar un nombre del producto")
     @Size(min = 3, message = "El nombre debe tener minimo 3 caracteres")
 	private String producto;
 	
+    @NotBlank(message = "Debe ingresar una descripcion")
     @NotNull(message = "Debe ingresar una descripcion")
     @Size(min = 3, message = "La descripcion debe contener minimo 3 caracteres")
 	private String descripcion;
 	
+    @NotBlank(message = "Debe ingresar una descripcion")
     @NotNull(message = "Debe ingresar un precio")
     @DecimalMin(value = "0.01", message = "Debe ingresar un valor mayor a 0.00 para el precio")
 	private Double precio;
 	
+    @NotBlank(message = "Seleccione una categoria")
     @NotNull(message = "Seleccione una categoria")
     @Min(value = 1, message = "Seleccione una categoria")
 	private Long idCategoria;
 	
+    @NotBlank(message = "Seleccione una marca")
     @NotNull(message = "Seleccione una marca")
     @Min(value = 1, message = "Seleccione una marca")
 	private Long idMarca;
 
+    @NotBlank(message = "Seleccione una Unidad de Medida")
     @NotNull(message = "Seleccione una Unidad de Medida")
     @Min(value = 1, message = "Seleccione una Unidad de Medida")
     private Long idUnidadMedida;
