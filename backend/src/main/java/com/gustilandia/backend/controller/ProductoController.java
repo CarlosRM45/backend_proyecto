@@ -1,5 +1,8 @@
 package com.gustilandia.backend.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import com.gustilandia.backend.dto.DTOProducto;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
 
-@CrossOrigin(origins= "http://localhost:4200",maxAge = 3600)
+@CrossOrigin(origins = "*"/*origins= "http://localhost:4200"*/,maxAge = 3600)
 @RestController
 @RequestMapping("/producto")
 public class ProductoController {
@@ -81,6 +84,17 @@ public class ProductoController {
 		
 		return new ResponseEntity<Response>(service.eliminar(id), HttpStatus.OK);
 		
+	}
+
+	@GetMapping(value = "/listarproductosmvl")
+	public ResponseEntity<List<DTOProducto>> ListarProductosMvl(){
+		List<DTOProducto> lista = service.listarProductosMvl();
+		
+		if (lista == null) {
+			lista = new ArrayList<DTOProducto>();
+		}
+		
+		return new ResponseEntity<List<DTOProducto>>(lista, HttpStatus.OK);
 	}
 
 }

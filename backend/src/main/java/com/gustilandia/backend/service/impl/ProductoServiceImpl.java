@@ -1,6 +1,7 @@
 package com.gustilandia.backend.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -172,6 +173,22 @@ public class ProductoServiceImpl implements ProductoService{
 			producto.setFechaCrea(new Date(System.currentTimeMillis()));
 		}
 		
+		return producto;
+	}
+
+	@Override
+	public List<DTOProducto> listarProductosMvl() {
+		
+		List<DTOProducto> producto = new ArrayList<DTOProducto>();
+		List<Object[]> lista =  repository.listarProductosMvl();
+		for(Object[] obj : lista) {
+			DTOProducto p = new DTOProducto();
+			p.setIdProducto(Long.valueOf(obj[0].toString()));
+			p.setProducto(obj[1].toString());
+			p.setDescripcion(obj[2].toString());
+			producto.add(p);
+		}
+
 		return producto;
 	}
 
