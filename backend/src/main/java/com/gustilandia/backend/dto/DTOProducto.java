@@ -22,7 +22,7 @@ public class DTOProducto {
 	private String descripcion;
 	
     @NotNull(message = "Debe ingresar un precio")
-    @DecimalMin(value = "0.01", message = "Debe ingresar un valor mayor a 0.00")
+    @DecimalMin(value = "0.01", message = "Debe ingresar un valor mayor a 0.00 para el precio")
 	private Double precio;
 	
     @NotNull(message = "Seleccione una categoria")

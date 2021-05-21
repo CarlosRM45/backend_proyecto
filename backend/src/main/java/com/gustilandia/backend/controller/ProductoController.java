@@ -37,19 +37,19 @@ public class ProductoController {
 	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
 		Response producto = service.buscarId(id);
-		if(producto == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!producto.isSuccess())
+			return new ResponseEntity<>(producto, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(producto, HttpStatus.OK);
 		
 	}
 
 	@GetMapping("/buscarpornombre/{name}")
-	public ResponseEntity<Response> buscarId(@PathVariable("name") String name) {
+	public ResponseEntity<Response> buscarPorNombre(@PathVariable("name") String name) {
 		
 		Response producto = service.buscarPorNombre(name);
-		if(producto == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!producto.isSuccess())
+			return new ResponseEntity<>(producto, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(producto, HttpStatus.OK);
 		
