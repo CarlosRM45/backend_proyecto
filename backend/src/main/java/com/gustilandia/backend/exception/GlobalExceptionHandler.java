@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 		
 		Response response = new Response();
 		response.setResult(false);
-		response.setMessage(exception.getBindingResult().getFieldError().getDefaultMessage());
+		response.setMessage("Campos con datos no validos");
 		
 		List<String> listExceptions = exception.getBindingResult().getFieldErrors()
 			.stream().map(error -> error.getDefaultMessage()).collect(Collectors.toList());

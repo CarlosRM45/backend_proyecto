@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.gustilandia.backend.dto.DTOProducto;
 import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Producto;
+import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
@@ -33,37 +34,6 @@ public class ProductoServiceImpl implements ProductoService{
 		
 		Response response = new Response();
 		Producto producto = new Producto();
-
-		if(productoDto.getProducto() == null || productoDto.getProducto().trim().length() <= 0){
-			response.setMessage("Ingrese el nombre del producto.");
-			return response;
-		}
-
-		if(productoDto.getDescripcion() == null || productoDto.getDescripcion().trim().length() <= 0){
-			response.setMessage("Ingrese una descripcion del producto.");
-			return response;
-		}
-
-		if(productoDto.getPrecio() == null || productoDto.getPrecio() <= 0){
-			response.setMessage("Ingrese un precio mayor a 0.");
-			return response;
-		}
-
-		if(productoDto.getIdCategoria() == null || productoDto.getIdCategoria() == 0){
-			response.setMessage("Seleccione una categoria.");
-			return response;
-		}
-
-		if(productoDto.getIdMarca() == null || productoDto.getIdMarca() == 0){
-			response.setMessage("Seleccione una marca.");
-			return response;
-		}
-
-		if(productoDto.getIdUnidadMedida() == null || productoDto.getIdUnidadMedida() == 0){
-			response.setMessage("Seleccione una unidad de medida.");
-			return response;
-		}
-
 		
 		try {
 
@@ -97,6 +67,8 @@ public class ProductoServiceImpl implements ProductoService{
 			_producto.setMarca(producto.getMarca());
 			_producto.setStock(producto.getStock());
 			_producto.setUnidadMedida(producto.getUnidadMedida());
+			_producto.setUsuarioEdita(producto.getUsuarioEdita());
+			_producto.setFechaEdita(producto.getFechaEdita());
 
 			response.setResult(repository.save(_producto));
 			response.setSuccess(true);
@@ -129,12 +101,15 @@ public class ProductoServiceImpl implements ProductoService{
 	@Override
 	public Response buscarId(Long id) {
 
-		Producto producto = repository.findById(id).get();
+		Optional<Producto> producto = repository.findById(id);
+		
+		if(!producto.isPresent())
+			return new Response(false, null, "El Producto con el id: " + id + " no existe.");
+		
+		if(producto.get().getEstado().getIdEstado() != 1)
+			return new Response(false, null, "El Producto con el id: " + id + " no existe.");
 
-		if(producto.getEstado().getIdEstado() != 1)
-			return new Response(false, null, "El Producto no existe.");
-
-		return new Response(true, producto, "");
+		return new Response(true, producto.get(), "");
 	}
 
 	@Override
@@ -153,6 +128,9 @@ public class ProductoServiceImpl implements ProductoService{
 		List<Producto> listadoProductos = repository.buscarPorNombre(nombre).stream()
 				.filter(producto -> producto.getEstado().getIdEstado() == 1)
 				.collect(Collectors.toList());
+		
+		if(listadoProductos.isEmpty())
+			return new Response(false, listadoProductos, "No existen productos");
 
 		return new Response(true, listadoProductos , "");
 	}
@@ -168,6 +146,9 @@ public class ProductoServiceImpl implements ProductoService{
 
 		if(productoDto.getIdProducto() != 0){
 			producto.setFechaEdita(new Date(System.currentTimeMillis()));
+			Usuario usuarioedita = new Usuario();
+			usuarioedita.setIdUsuario(productoDto.getIdUsuarioCrea());
+			producto.setUsuarioEdita(usuarioedita);
 		}
 		else{
 			producto.setFechaCrea(new Date(System.currentTimeMillis()));
