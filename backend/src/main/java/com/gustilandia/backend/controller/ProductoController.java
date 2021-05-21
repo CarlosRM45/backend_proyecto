@@ -43,6 +43,17 @@ public class ProductoController {
 		return new ResponseEntity<Response>(producto, HttpStatus.OK);
 		
 	}
+
+	@GetMapping("/buscarpornombre/{name}")
+	public ResponseEntity<Response> buscarId(@PathVariable("name") String name) {
+		
+		Response producto = service.buscarPorNombre(name);
+		if(producto == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		return new ResponseEntity<Response>(producto, HttpStatus.OK);
+		
+	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registrarProducto(@RequestBody @Valid DTOProducto producto) {

@@ -146,6 +146,16 @@ public class ProductoServiceImpl implements ProductoService{
 		return new Response(true, listadoProductos , "");
 	}
 
+	@Override
+	public Response buscarPorNombre(String nombre) {
+		
+		List<Producto> listadoProductos = repository.buscarPorNombre(nombre).stream()
+				.filter(producto -> producto.getEstado().getIdEstado() == 1)
+				.collect(Collectors.toList());
+
+		return new Response(true, listadoProductos , "");
+	}
+
 	
 	private Producto mappingProducto(DTOProducto productoDto){
 
@@ -164,6 +174,5 @@ public class ProductoServiceImpl implements ProductoService{
 		
 		return producto;
 	}
-
 
 }

@@ -49,7 +49,7 @@ public class CategoriaController {
 	@GetMapping("/{id}/productos")
 	public ResponseEntity<Response> buscarProductosCategoria(@PathVariable("id") Long id) {
 		
-		Response cat = service.buscarId(id);
+		Response cat = service.listarProductoCategoria(id);
 		if(cat == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
