@@ -20,24 +20,24 @@ public class DTOProducto {
     @Size(min = 3, message = "La descripcion debe contener minimo 3 caracteres")
 	private String descripcion;
 	
-    @NotBlank(message = "Debe ingresar una descripcion")
+    //@NotBlank(message = "Debe ingresar una descripcion")
     @NotNull(message = "Debe ingresar un precio")
     @DecimalMin(value = "0.01", message = "Debe ingresar un valor mayor a 0.00 para el precio")
 	private Double precio;
 
     private String imagen;
 	
-    @NotBlank(message = "Seleccione una categoria")
+    //@NotBlank(message = "Seleccione una categoria")
     @NotNull(message = "Seleccione una categoria")
     @Min(value = 1, message = "Seleccione una categoria")
 	private Long idCategoria;
 	
-    @NotBlank(message = "Seleccione una marca")
+    //@NotBlank(message = "Seleccione una marca")
     @NotNull(message = "Seleccione una marca")
     @Min(value = 1, message = "Seleccione una marca")
 	private Long idMarca;
 
-    @NotBlank(message = "Seleccione una Unidad de Medida")
+    //@NotBlank(message = "Seleccione una Unidad de Medida")
     @NotNull(message = "Seleccione una Unidad de Medida")
     @Min(value = 1, message = "Seleccione una Unidad de Medida")
     private Long idUnidadMedida;

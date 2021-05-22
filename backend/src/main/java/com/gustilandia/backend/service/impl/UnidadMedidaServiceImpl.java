@@ -54,12 +54,12 @@ public class UnidadMedidaServiceImpl implements UnidadMedidaService{
 
 	@Override
 	public Response buscarId(Long id) {
-		return new Response();
+		return new Response(true, repository.findById(id).get(), "");
 	}
 
 	@Override
 	public Response listar() {
-		return new Response();
+		return new Response(true, repository.findAll(), "");
 	}
 
 }

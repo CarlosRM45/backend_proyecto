@@ -137,28 +137,6 @@ public class ProductoServiceImpl implements ProductoService{
 		return new Response(true, listadoProductos , "");
 	}
 
-	
-	private Producto mappingProducto(DTOProducto productoDto){
-
-		Producto producto = mapper.map(productoDto, Producto.class);
-		Estado estado = new Estado();
-		estado.setIdEstado(1L);
-		producto.setEstado(estado);
-
-
-		if(productoDto.getIdProducto() != 0){
-			producto.setFechaEdita(new Date(System.currentTimeMillis()));
-			Usuario usuarioedita = new Usuario();
-			usuarioedita.setIdUsuario(productoDto.getIdUsuarioCrea());
-			producto.setUsuarioEdita(usuarioedita);
-		}
-		else{
-			producto.setFechaCrea(new Date(System.currentTimeMillis()));
-		}
-		
-		return producto;
-	}
-
 	@Override
 	public Response validarStock(Long id, int cantidad) {
 		
@@ -225,6 +203,27 @@ public class ProductoServiceImpl implements ProductoService{
 			producto.add(p);
 		}
 
+		return producto;
+	}
+
+	private Producto mappingProducto(DTOProducto productoDto){
+
+		Producto producto = mapper.map(productoDto, Producto.class);
+		Estado estado = new Estado();
+		estado.setIdEstado(1L);
+		producto.setEstado(estado);
+
+
+		if(productoDto.getIdProducto() != 0){
+			producto.setFechaEdita(new Date(System.currentTimeMillis()));
+			Usuario usuarioedita = new Usuario();
+			usuarioedita.setIdUsuario(1L);
+			producto.setUsuarioEdita(usuarioedita);
+		}
+		else{
+			producto.setFechaCrea(new Date(System.currentTimeMillis()));
+		}
+		
 		return producto;
 	}
 
