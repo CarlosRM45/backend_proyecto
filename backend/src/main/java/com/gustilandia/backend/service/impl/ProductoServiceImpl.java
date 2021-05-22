@@ -19,6 +19,8 @@ import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
+import com.gustilandia.backend.modelexample.ModelProducto;
+import com.gustilandia.backend.repository.UnidadMedidaRepository;
 
 @Service
 public class ProductoServiceImpl implements ProductoService{
@@ -158,22 +160,6 @@ public class ProductoServiceImpl implements ProductoService{
 	}
 
 	@Override
-	public List<DTOProducto> listarProductosMvl() {
-		
-		List<DTOProducto> producto = new ArrayList<DTOProducto>();
-		List<Object[]> lista =  repository.listarProductosMvl();
-		for(Object[] obj : lista) {
-			DTOProducto p = new DTOProducto();
-			p.setIdProducto(Long.valueOf(obj[0].toString()));
-			p.setProducto(obj[1].toString());
-			p.setDescripcion(obj[2].toString());
-			producto.add(p);
-		}
-
-		return producto;
-	}
-
-	@Override
 	public Response validarStock(Long id, int cantidad) {
 		
 		Optional<Producto> producto = repository.findById(id);
@@ -190,6 +176,56 @@ public class ProductoServiceImpl implements ProductoService{
 			return new Response(false, null, "No hay stock suficiente del producto");
 		
 		return new Response(true, null, "");
+	}
+
+	@Override
+	public List<ModelProducto> listarProductosMvl() {		
+
+		List<ModelProducto> producto = new ArrayList<ModelProducto>();
+		List<Object[]> lista =  repository.listarProductosMvl();
+		for(Object[] obj : lista) {
+			
+			ModelProducto p = new ModelProducto();
+			p.setIdProducto(Long.valueOf(obj[0].toString()));
+			p.setNameProduct(obj[1].toString());
+			p.setDescripcion(obj[2].toString());
+			p.setPrecio(Double.parseDouble(obj[3].toString()));
+			p.setImagen(obj[4].toString());
+			p.setStock(Integer.parseInt(obj[5].toString()));
+			p.setIdUnidadMedida(Long.valueOf(obj[6].toString()));
+			p.setIdMarca(Long.valueOf(obj[7].toString()));
+			p.setUnidadMedida(obj[8].toString());
+			p.setNameMarca(obj[9].toString());
+			
+			producto.add(p);
+		}
+
+		return producto;
+	}
+
+	@Override
+	public List<ModelProducto> listarProductsByCategory(Long id) {
+		
+		List<ModelProducto> producto = new ArrayList<ModelProducto>();
+		List<Object[]> lista =  repository.listarProductsByCategory(id);
+		for(Object[] obj : lista) {
+			
+			ModelProducto p = new ModelProducto();
+			p.setIdProducto(Long.valueOf(obj[0].toString()));
+			p.setNameProduct(obj[1].toString());
+			p.setDescripcion(obj[2].toString());
+			p.setPrecio(Double.parseDouble(obj[3].toString()));
+			p.setImagen(obj[4].toString());
+			p.setStock(Integer.parseInt(obj[5].toString()));
+			p.setIdUnidadMedida(Long.valueOf(obj[6].toString()));
+			p.setIdMarca(Long.valueOf(obj[7].toString()));
+			p.setUnidadMedida(obj[8].toString());
+			p.setNameMarca(obj[9].toString());
+			
+			producto.add(p);
+		}
+
+		return producto;
 	}
 
 }

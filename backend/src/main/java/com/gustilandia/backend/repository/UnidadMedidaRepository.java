@@ -6,4 +6,5 @@ import com.gustilandia.backend.model.UnidadMedida;
 
 public interface UnidadMedidaRepository extends JpaRepository<UnidadMedida, Long>{
 
+   
 }

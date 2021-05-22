@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import com.gustilandia.backend.modelexample.ModelProducto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,15 +88,27 @@ public class ProductoController {
 	}
 
 	@GetMapping(value = "/listarproductosmvl")
-	public ResponseEntity<List<DTOProducto>> ListarProductosMvl(){
-		List<DTOProducto> lista = service.listarProductosMvl();
+	public ResponseEntity<List<ModelProducto>> ListarProductosMvl(){
+		List<ModelProducto> lista = service.listarProductosMvl();
 		
 		if (lista == null) {
-			lista = new ArrayList<DTOProducto>();
+			lista = new ArrayList<ModelProducto>();
 		}
 		
-		return new ResponseEntity<List<DTOProducto>>(lista, HttpStatus.OK);
+		return new ResponseEntity<List<ModelProducto>>(lista, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/listProductsByCategory/{id}")
+	public ResponseEntity<List<ModelProducto>> ListProductsByCategory(@PathVariable("id") Long id){
+		List<ModelProducto> lista = service.listarProductsByCategory(id);
+		
+		if (lista == null) {
+			lista = new ArrayList<ModelProducto>();
+		}
+		
+		return new ResponseEntity<List<ModelProducto>>(lista, HttpStatus.OK);
+	}
+
 	
 	@GetMapping(value = "/{id}/validarstock/{cant}")
 	public ResponseEntity<Response> validarStock(@PathVariable("id") Long id, @PathVariable("cant") int cant){

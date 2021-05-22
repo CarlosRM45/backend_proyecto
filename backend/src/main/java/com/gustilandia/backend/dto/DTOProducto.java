@@ -24,6 +24,8 @@ public class DTOProducto {
     @NotNull(message = "Debe ingresar un precio")
     @DecimalMin(value = "0.01", message = "Debe ingresar un valor mayor a 0.00 para el precio")
 	private Double precio;
+
+    private String imagen;
 	
     @NotBlank(message = "Seleccione una categoria")
     @NotNull(message = "Seleccione una categoria")
@@ -74,6 +76,14 @@ public class DTOProducto {
 
     public void setPrecio(Double precio) {
         this.precio = precio;
+    }
+
+    public String getImagePath() {
+        return imagen;
+    }
+
+    public void setImagePath(String imagen) {
+        this.imagen = imagen;
     }
 
     public Long getIdCategoria() {

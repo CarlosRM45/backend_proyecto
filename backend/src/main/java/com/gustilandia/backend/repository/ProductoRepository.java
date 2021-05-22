@@ -20,8 +20,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
     @Query(value = "update producto set id_estado = 2 where id_producto =:id",nativeQuery = true)
     int deleteProducto(@Param("id") Long id);
 
-    @Query(value = "exec dbo.sp_listProductMvl", nativeQuery = true)
+    @Query(value = "exec dbo.sp_listProductMovil", nativeQuery = true)
     List<Object[]> listarProductosMvl();
 
+    @Query(value = "exec dbo.sp_listProductByCategory :id", nativeQuery = true)
+    List<Object[]> listarProductsByCategory(@Param("id") Long id);
 
 }

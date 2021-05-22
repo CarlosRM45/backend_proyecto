@@ -5,12 +5,15 @@ import com.gustilandia.backend.service.Response;
 import java.util.List;
 
 import com.gustilandia.backend.dto.DTOProducto;
+import com.gustilandia.backend.modelexample.ModelProducto;
 
 public interface ProductoService extends ICRUD<DTOProducto>{
 
     Response buscarPorNombre(String nombre);
 
-    List<DTOProducto> listarProductosMvl();
+    List<ModelProducto> listarProductosMvl();
+
+    List<ModelProducto> listarProductsByCategory(Long id);
     
     Response validarStock(Long id, int cantidad);
 
