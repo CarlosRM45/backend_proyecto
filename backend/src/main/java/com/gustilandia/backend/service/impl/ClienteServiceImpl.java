@@ -1,20 +1,16 @@
 package com.gustilandia.backend.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCliente;
 import com.gustilandia.backend.model.Cliente;
-import com.gustilandia.backend.model.Distrito;
-import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
@@ -33,31 +29,6 @@ public class ClienteServiceImpl implements ClienteService{
 		
 		Response response = new Response();
 		Cliente cliente = new Cliente();
-
-		if(clienteDto.getNombreCompleto() == null || clienteDto.getNombreCompleto().trim().length() <= 0){
-			response.setMessage("Ingrese sus nombres y apellidos");
-			return response;
-		}
-
-		if(clienteDto.getIdDocumentoIdentidad() == null || clienteDto.getIdDocumentoIdentidad() == 0L){
-			response.setMessage("Debe seleccionar un documento de identidad");
-			return response;
-		}
-
-		if(clienteDto.getNumeroDocumentoIdentidad() == null || clienteDto.getNumeroDocumentoIdentidad().trim().length() <= 0L){
-			response.setMessage("Debe ingresar su DNI");
-			return response;
-		}
-
-		if(clienteDto.getNumeroDocumentoIdentidad().trim().length() != 8){
-			response.setMessage("El DNI ingresado es inválido.");
-			return response;
-		}
-
-		if(clienteDto.getCorreo().trim().length() <= 0  ){
-			response.setMessage("Debe ingresar un correo electrónico");
-			return response;
-		}
 
 		try {
 

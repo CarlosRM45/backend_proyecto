@@ -2,15 +2,26 @@ package com.gustilandia.backend.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class DTODetalleVenta implements Serializable{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@NotNull(message = "Debe seleccionar un producto")
+	@NotBlank(message = "Debe seleccionar un producto")
 	private Long idProducto;
+	
 	private Double precio;
+	
 	private Double porcentajeDescuento;
+	
+	@Min(value = 1, message = "La cantidad minima de pedido es 1")
 	private int cantidad;
 	
 	public DTODetalleVenta() {

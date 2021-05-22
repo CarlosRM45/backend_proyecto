@@ -96,5 +96,12 @@ public class ProductoController {
 		
 		return new ResponseEntity<List<DTOProducto>>(lista, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/{id}/validarstock/{cant}")
+	public ResponseEntity<Response> validarStock(@PathVariable("id") Long id, @PathVariable("cant") int cant){
+		
+		return new ResponseEntity<Response>(service.validarStock(id, cant), HttpStatus.OK);
+		
+	}
 
 }

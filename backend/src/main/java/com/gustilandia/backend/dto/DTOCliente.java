@@ -2,6 +2,7 @@ package com.gustilandia.backend.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -10,17 +11,21 @@ public class DTOCliente {
     
     private Long idCliente;
 
+    @NotBlank(message = "Ingrese sus nombres y apellidos")
     @NotNull(message = "Ingrese sus nombres y apellidos")
     @Size(min = 3, message = "Ingrese sus nombres y apellidos, debe tener minimo 3 caracteres")
     private String nombreCompleto;
 
+    @NotBlank(message = "Seleccione un tipo de documento de identidad")
     @Min(value = 1, message = "Seleccione un tipo de documento de identidad")
 	private Long idDocumentoIdentidad;
     
+    @NotBlank(message = "Ingreser un numero de documento de identidad")
     @NotNull(message = "Ingreser un numero de documento de identidad")
     @Size(min = 8, max = 8, message = "El DNI ingresado no es valido")
 	private String numeroDocumentoIdentidad;
 	
+    @NotBlank(message = "Ingrese un correo electronico")
     @Email(message = "Ingrese un correo electronico valido")
     @NotNull(message = "Ingrese un correo electronico")
 	private String correo;

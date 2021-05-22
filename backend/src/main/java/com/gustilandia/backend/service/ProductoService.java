@@ -11,5 +11,7 @@ public interface ProductoService extends ICRUD<DTOProducto>{
     Response buscarPorNombre(String nombre);
 
     List<DTOProducto> listarProductosMvl();
+    
+    Response validarStock(Long id, int cantidad);
 
 }

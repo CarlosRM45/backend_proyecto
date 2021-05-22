@@ -173,4 +173,23 @@ public class ProductoServiceImpl implements ProductoService{
 		return producto;
 	}
 
+	@Override
+	public Response validarStock(Long id, int cantidad) {
+		
+		Optional<Producto> producto = repository.findById(id);
+		
+		if(!producto.isPresent())
+			return new Response(false, null, "El Producto con el id: " + id + " no existe.");
+		
+		if(producto.get().getEstado().getIdEstado() != 1)
+			return new Response(false, null, "El Producto con el id: " + id + " no existe.");
+		
+		Producto _producto = producto.get();
+		
+		if(_producto.getStock()<cantidad)
+			return new Response(false, null, "No hay stock suficiente del producto");
+		
+		return new Response(true, null, "");
+	}
+
 }
