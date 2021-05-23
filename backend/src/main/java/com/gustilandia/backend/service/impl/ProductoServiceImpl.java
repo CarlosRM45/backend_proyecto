@@ -48,7 +48,7 @@ public class ProductoServiceImpl implements ProductoService{
 		try {
 			Date date = Calendar.getInstance().getTime();  
 			DateFormat dateFormat = new SimpleDateFormat("ddmmyyyyhhmmss");  
-			String fileName =  String.format("%s_%s.%s", name,dateFormat.format(date), extension);
+			String fileName =  String.format("%s_%s.%s", name,dateFormat.format(date), extension).replace(" ", "_");
 
 			FileUploadUtil.saveFile(uploadDir, fileName, file);
 			response.setResult(fileName);
