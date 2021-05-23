@@ -1,17 +1,23 @@
 package com.gustilandia.backend.service.impl;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import java.io.*;
+import java.nio.file.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar; 
 import com.gustilandia.backend.dto.DTOProducto;
 import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Producto;
@@ -20,7 +26,6 @@ import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.modelexample.ModelProducto;
-import com.gustilandia.backend.repository.UnidadMedidaRepository;
 
 @Service
 public class ProductoServiceImpl implements ProductoService{
@@ -31,6 +36,30 @@ public class ProductoServiceImpl implements ProductoService{
 	@Autowired
 	private ModelMapper mapper;
 	
+
+	@Override
+	public Response uploadImageProducto(MultipartFile file) {
+
+		Response response = new Response();
+        String uploadDir = "files/img/producto";
+		String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+		String name = StringUtils.getFilename(file.getOriginalFilename()).replace("."+extension, "");
+		
+		try {
+			Date date = Calendar.getInstance().getTime();  
+			DateFormat dateFormat = new SimpleDateFormat("ddmmyyyyhhmmss");  
+			String fileName =  String.format("%s_%s.%s", name,dateFormat.format(date), extension);
+
+			FileUploadUtil.saveFile(uploadDir, fileName, file);
+			response.setResult(fileName);
+			response.setSuccess(true);
+		} catch (Exception e) {
+			response.setResult("Ocurrio un error al guardar la imagen");
+		}
+ 
+		return response;
+	}
+
 	@Override
 	public Response registrar(DTOProducto productoDto) {
 		
@@ -39,10 +68,10 @@ public class ProductoServiceImpl implements ProductoService{
 		
 		try {
 
-			producto = repository.save(mappingProducto(productoDto));
+			producto = mappingProducto(productoDto);
+			producto = repository.save(producto);
 			response.setResult(producto);
 			response.setSuccess(true);
-			
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al guardar el producto: " + e.getMessage());
 		}
@@ -63,7 +92,7 @@ public class ProductoServiceImpl implements ProductoService{
 
 			_producto.setDescripcion(producto.getDescripcion());
 			_producto.setProducto(producto.getProducto());
-			_producto.setImagen(producto.getImagen());
+			_producto.setImagen(producto.getImagen() == "" ? _producto.getImagen() : producto.getImagen());
 			_producto.setPrecio(producto.getPrecio());
 			_producto.setCategoria(producto.getCategoria());
 			_producto.setMarca(producto.getMarca());
@@ -212,19 +241,40 @@ public class ProductoServiceImpl implements ProductoService{
 		Estado estado = new Estado();
 		estado.setIdEstado(1L);
 		producto.setEstado(estado);
-
+		Usuario usuario = new Usuario();
 
 		if(productoDto.getIdProducto() != 0){
 			producto.setFechaEdita(new Date(System.currentTimeMillis()));
-			Usuario usuarioedita = new Usuario();
-			usuarioedita.setIdUsuario(1L);
-			producto.setUsuarioEdita(usuarioedita);
+			usuario.setIdUsuario(1L);
+			producto.setUsuarioEdita(usuario);
 		}
 		else{
+			usuario.setIdUsuario(1L);
+			producto.setUsuarioCrea(usuario);
 			producto.setFechaCrea(new Date(System.currentTimeMillis()));
 		}
 		
 		return producto;
 	}
+	
+	public static class FileUploadUtil {
+     
+		public static void saveFile (String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
+			Path uploadPath = Paths.get(uploadDir);
+			 
+			if (!Files.exists(uploadPath)) {
+				Files.createDirectories(uploadPath);
+			}
+			 
+			try (InputStream inputStream = multipartFile.getInputStream()) {
+				Path filePath = uploadPath.resolve(fileName);
+				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException ioe) {        
+				throw new IOException("Could not save image file: " + fileName, ioe);
+			}      
+		}
+	}
+
+
 
 }

@@ -30,7 +30,7 @@ public class Producto {
 	@Column(name = "precio")
 	private Double precio;
 
-	@Column(name = "imagen")
+	@Column(name = "imagen", length = 64)
 	private String imagen;
 	
 	@ManyToOne

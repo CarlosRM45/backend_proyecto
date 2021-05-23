@@ -1,5 +1,6 @@
 package com.gustilandia.backend.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gustilandia.backend.dto.DTOProducto;
 import com.gustilandia.backend.service.ProductoService;
@@ -60,9 +63,16 @@ public class ProductoController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> registrarProducto(@RequestBody @Valid DTOProducto producto) {
+	public ResponseEntity<Response> registrarProducto(@RequestBody @Valid DTOProducto producto){
+													 //@RequestParam("imageFile") MultipartFile multipartFile) throws IOException {
 		return new ResponseEntity<>(service.registrar(producto), HttpStatus.OK);
 	}
+
+	@PostMapping("/uploadImage")
+    public ResponseEntity<Response> uploadFile(@RequestParam("imageFile") MultipartFile file) throws Exception {
+
+		return new ResponseEntity<Response>(service.uploadImageProducto(file), HttpStatus.OK);
+    }
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> actualizarProducto(@RequestBody @Valid DTOProducto producto) {

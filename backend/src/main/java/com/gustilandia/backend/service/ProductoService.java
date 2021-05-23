@@ -2,6 +2,8 @@ package com.gustilandia.backend.service;
 
 import com.gustilandia.backend.service.Response;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 import com.gustilandia.backend.dto.DTOProducto;
@@ -16,5 +18,7 @@ public interface ProductoService extends ICRUD<DTOProducto>{
     List<ModelProducto> listarProductsByCategory(Long id);
     
     Response validarStock(Long id, int cantidad);
+
+    Response uploadImageProducto(MultipartFile file);
 
 }

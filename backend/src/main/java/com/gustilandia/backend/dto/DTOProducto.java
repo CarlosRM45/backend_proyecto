@@ -6,8 +6,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class DTOProducto {
     
+
+    
+
+    public DTOProducto() {
+    
+    }
+
     private Long idProducto;
     
     @NotBlank(message = "Debe ingresar un nombre del producto")
@@ -27,6 +36,14 @@ public class DTOProducto {
 
     private String imagen;
 	
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     //@NotBlank(message = "Seleccione una categoria")
     @NotNull(message = "Seleccione una categoria")
     @Min(value = 1, message = "Seleccione una categoria")
@@ -45,6 +62,16 @@ public class DTOProducto {
 	private int stock;
 
 	private Long idUsuarioCrea;
+
+    // private MultipartFile imageFile;
+
+    // public MultipartFile getImageFile() {
+    //     return imageFile;
+    // }
+
+    // public void setImageFile(MultipartFile imageFile) {
+    //     this.imageFile = imageFile;
+    // }
 
     public Long getIdProducto() {
         return idProducto;
