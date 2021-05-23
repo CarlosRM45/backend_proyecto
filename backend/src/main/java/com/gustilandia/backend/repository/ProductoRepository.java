@@ -12,9 +12,6 @@ import com.gustilandia.backend.model.Producto;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long>{
 	
-	@Query("select p from Producto p where p.producto like '%' + :name + '%'")
-	List<Producto> buscarPorNombre(@Param("name") String nombre);
-
 	@Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update producto set id_estado = 2 where id_producto =:id",nativeQuery = true)
@@ -22,8 +19,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
 
     @Query(value = "exec dbo.sp_listProductMovil", nativeQuery = true)
     List<Object[]> listarProductosMvl();
-
+    
     @Query(value = "exec dbo.sp_listProductByCategory :id", nativeQuery = true)
     List<Object[]> listarProductsByCategory(@Param("id") Long id);
 
+    @Query(value = "exec dbo.sp_listProductsByName :producto ", nativeQuery = true)
+    List<Object[]> listarProductsByName(@Param("producto") String id);
 }

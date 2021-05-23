@@ -50,17 +50,6 @@ public class ProductoController {
 		return new ResponseEntity<Response>(producto, HttpStatus.OK);
 		
 	}
-
-	@GetMapping("/buscarpornombre/{name}")
-	public ResponseEntity<Response> buscarPorNombre(@PathVariable("name") String name) {
-		
-		Response producto = service.buscarPorNombre(name);
-		if(!producto.isSuccess())
-			return new ResponseEntity<>(producto, HttpStatus.NOT_FOUND);
-		
-		return new ResponseEntity<Response>(producto, HttpStatus.OK);
-		
-	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registrarProducto(@RequestBody @Valid DTOProducto producto){
@@ -100,6 +89,17 @@ public class ProductoController {
 	@GetMapping(value = "/listarproductosmvl")
 	public ResponseEntity<List<ModelProducto>> ListarProductosMvl(){
 		List<ModelProducto> lista = service.listarProductosMvl();
+		
+		if (lista == null) {
+			lista = new ArrayList<ModelProducto>();
+		}
+		
+		return new ResponseEntity<List<ModelProducto>>(lista, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/listProductsByName/{name}")
+	public ResponseEntity<List<ModelProducto>> ListProductsByName(@PathVariable("name") String name){
+		List<ModelProducto> lista = service.listarProductsByName(name);
 		
 		if (lista == null) {
 			lista = new ArrayList<ModelProducto>();

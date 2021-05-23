@@ -11,11 +11,11 @@ import com.gustilandia.backend.modelexample.ModelProducto;
 
 public interface ProductoService extends ICRUD<DTOProducto>{
 
-    Response buscarPorNombre(String nombre);
-
     List<ModelProducto> listarProductosMvl();
 
     List<ModelProducto> listarProductsByCategory(Long id);
+
+    List<ModelProducto> listarProductsByName(String id);
     
     Response validarStock(Long id, int cantidad);
 

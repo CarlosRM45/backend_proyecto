@@ -154,19 +154,6 @@ public class ProductoServiceImpl implements ProductoService{
 	}
 
 	@Override
-	public Response buscarPorNombre(String nombre) {
-		
-		List<Producto> listadoProductos = repository.buscarPorNombre(nombre).stream()
-				.filter(producto -> producto.getEstado().getIdEstado() == 1)
-				.collect(Collectors.toList());
-		
-		if(listadoProductos.isEmpty())
-			return new Response(false, listadoProductos, "No existen productos");
-
-		return new Response(true, listadoProductos , "");
-	}
-
-	@Override
 	public Response validarStock(Long id, int cantidad) {
 		
 		Optional<Producto> producto = repository.findById(id);
@@ -187,52 +174,38 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Override
 	public List<ModelProducto> listarProductosMvl() {		
-
-		List<ModelProducto> producto = new ArrayList<ModelProducto>();
 		List<Object[]> lista =  repository.listarProductosMvl();
-		for(Object[] obj : lista) {
-			
-			ModelProducto p = new ModelProducto();
-			p.setIdProducto(Long.valueOf(obj[0].toString()));
-			p.setNameProduct(obj[1].toString());
-			p.setDescripcion(obj[2].toString());
-			p.setPrecio(Double.parseDouble(obj[3].toString()));
-			p.setImagen(obj[4].toString());
-			p.setStock(Integer.parseInt(obj[5].toString()));
-			p.setIdUnidadMedida(Long.valueOf(obj[6].toString()));
-			p.setIdMarca(Long.valueOf(obj[7].toString()));
-			p.setUnidadMedida(obj[8].toString());
-			p.setNameMarca(obj[9].toString());
-			
-			producto.add(p);
-		}
-
-		return producto;
+		return _procesarListado(lista);
 	}
 
 	@Override
 	public List<ModelProducto> listarProductsByCategory(Long id) {
-		
-		List<ModelProducto> producto = new ArrayList<ModelProducto>();
 		List<Object[]> lista =  repository.listarProductsByCategory(id);
-		for(Object[] obj : lista) {
-			
-			ModelProducto p = new ModelProducto();
-			p.setIdProducto(Long.valueOf(obj[0].toString()));
-			p.setNameProduct(obj[1].toString());
-			p.setDescripcion(obj[2].toString());
-			p.setPrecio(Double.parseDouble(obj[3].toString()));
-			p.setImagen(obj[4].toString());
-			p.setStock(Integer.parseInt(obj[5].toString()));
-			p.setIdUnidadMedida(Long.valueOf(obj[6].toString()));
-			p.setIdMarca(Long.valueOf(obj[7].toString()));
-			p.setUnidadMedida(obj[8].toString());
-			p.setNameMarca(obj[9].toString());
-			
-			producto.add(p);
-		}
+		return _procesarListado(lista);
+	}
 
-		return producto;
+	@Override
+	public List<ModelProducto> listarProductsByName(String name) {
+		List<Object[]> lista =  repository.listarProductsByName(name);
+		return _procesarListado(lista);
+	}
+	
+	public static class FileUploadUtil {
+     
+		public static void saveFile (String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
+			Path uploadPath = Paths.get(uploadDir);
+			 
+			if (!Files.exists(uploadPath)) {
+				Files.createDirectories(uploadPath);
+			}
+			 
+			try (InputStream inputStream = multipartFile.getInputStream()) {
+				Path filePath = uploadPath.resolve(fileName);
+				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException ioe) {        
+				throw new IOException("Could not save image file: " + fileName, ioe);
+			}      
+		}
 	}
 
 	private Producto mappingProducto(DTOProducto productoDto){
@@ -256,23 +229,27 @@ public class ProductoServiceImpl implements ProductoService{
 		
 		return producto;
 	}
-	
-	public static class FileUploadUtil {
-     
-		public static void saveFile (String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
-			Path uploadPath = Paths.get(uploadDir);
-			 
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
-			 
-			try (InputStream inputStream = multipartFile.getInputStream()) {
-				Path filePath = uploadPath.resolve(fileName);
-				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException ioe) {        
-				throw new IOException("Could not save image file: " + fileName, ioe);
-			}      
+
+	private List<ModelProducto> _procesarListado(List<Object[]> lista){
+
+		List<ModelProducto> producto = new ArrayList<ModelProducto>();
+		for(Object[] obj : lista) {
+			
+			ModelProducto p = new ModelProducto();
+			p.setIdProducto(Long.valueOf(obj[0].toString()));
+			p.setNameProduct(obj[1].toString());
+			p.setDescripcion(obj[2].toString());
+			p.setPrecio(Double.parseDouble(obj[3].toString()));
+			p.setImagen(obj[4].toString());
+			p.setStock(Integer.parseInt(obj[5].toString()));
+			p.setIdUnidadMedida(Long.valueOf(obj[6].toString()));
+			p.setIdMarca(Long.valueOf(obj[7].toString()));
+			p.setUnidadMedida(obj[8].toString());
+			p.setNameMarca(obj[9].toString());
+			
+			producto.add(p);
 		}
+		return producto;
 	}
 
 
