@@ -71,6 +71,7 @@ public class ProductoServiceImpl implements ProductoService{
 			producto = mappingProducto(productoDto);
 			producto = repository.save(producto);
 			response.setResult(producto);
+			response.setMessage("Producto guardado exitosamente.");
 			response.setSuccess(true);
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al guardar el producto: " + e.getMessage());
@@ -102,6 +103,7 @@ public class ProductoServiceImpl implements ProductoService{
 			_producto.setFechaEdita(producto.getFechaEdita());
 
 			response.setResult(repository.save(_producto));
+			response.setMessage("Producto actualizado exitosamente.");
 			response.setSuccess(true);
 
 		} catch (Exception e) {
