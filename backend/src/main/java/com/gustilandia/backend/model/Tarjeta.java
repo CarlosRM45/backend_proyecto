@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "tarjeta")
@@ -28,6 +30,10 @@ public class Tarjeta {
 	
 	@Column(name = "correo")
 	private String correo;
+
+	@ManyToOne
+	@JoinColumn(name = "id_cliente")
+	private Cliente cliente;
 
 	public Long getIdTarjeta() {
 		return idTarjeta;
