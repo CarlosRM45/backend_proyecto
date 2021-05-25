@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gustilandia.backend.dto.DTOVentaCarrito;
 import com.gustilandia.backend.dto.DTOVentas;
-import com.gustilandia.backend.model.Cliente;
-import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.VentaService;
 
@@ -46,6 +44,16 @@ public class VentaController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registrarVenta(@RequestBody DTOVentas venta) {
 		return new ResponseEntity<>(service.registrar(venta), HttpStatus.OK);
+	}
+
+	@PostMapping(path = "/registrarVentaCarrito", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response> registrarVentaCarrito(@RequestBody DTOVentaCarrito dtoVenta) {
+		return new ResponseEntity<>(service.insertVentaCarrito(dtoVenta), HttpStatus.OK);
+	}
+
+	@PostMapping(path ="/aumentarCantidadProducto", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response> aumentarCantidadProducto(@RequestBody DTOVentaCarrito dtoVenta) {
+		return new ResponseEntity<>(service.aumentarCantidadProducto(dtoVenta), HttpStatus.OK);
 	}
 	
 

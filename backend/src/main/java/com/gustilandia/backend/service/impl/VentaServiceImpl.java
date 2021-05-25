@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTODetalleVenta;
 import com.gustilandia.backend.dto.DTOTarjeta;
+import com.gustilandia.backend.dto.DTOVentaCarrito;
 import com.gustilandia.backend.dto.DTOVentas;
 import com.gustilandia.backend.model.Tarjeta;
 import com.gustilandia.backend.model.Venta;
@@ -132,6 +133,44 @@ public class VentaServiceImpl implements VentaService{
 				.collect(Collectors.toList());
 		return new Response(true, ventas, "");
 	}
+
+	@Override
+	public Response insertVentaCarrito(DTOVentaCarrito dtoVentaCarrito) {
+		
+		Response response = new Response();
+
+		try {
+			
+			Long idVenta = ventarepo.insertVentaCarrito(dtoVentaCarrito.getIdCliente(), dtoVentaCarrito.getIdProducto());
+
+			response.setResult(idVenta);
+			response.setSuccess(true);
+
+		} catch (Exception e) {
+			response.setMessage("Ocurrio un error al crear la venta del carrito: " + e.getMessage());
+		}
+
+		return response;
+	}
+
+	@Override
+	public Response aumentarCantidadProducto(DTOVentaCarrito dtoVentaCarrito) {
+		
+		Response response = new Response();
+
+		try {
+			
+			Long idVenta = ventarepo.aumentarCantidadProducto(dtoVentaCarrito.getIdCliente(), dtoVentaCarrito.getIdProducto(), dtoVentaCarrito.getCantidad());
+
+			response.setResult(idVenta);
+			response.setSuccess(true);
+
+		} catch (Exception e) {
+			response.setMessage("Ocurrio un error al aumentar la cantidad del carrito: " + e.getMessage());
+		}
+
+		return response;
+	}
 	
 	public Venta mappingDtoVenta(DTOVentas dtoVenta) {
 		
@@ -156,5 +195,7 @@ public class VentaServiceImpl implements VentaService{
 		return tarjeta;
 		
 	}
+
+	
 
 }

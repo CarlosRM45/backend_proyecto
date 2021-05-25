@@ -27,9 +27,6 @@ public class DTOVentas implements Serializable{
 	public DTOVentas() {
 	}
 	
-
-
-
 	public DTOVentas(Long idVenta, int nroVenta, Long idTipoComprobanteSunat, String correlativoComprobante,
 			Long idCliente, DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
 		this.idVenta = idVenta;
@@ -40,23 +37,13 @@ public class DTOVentas implements Serializable{
 		this.tarjeta = tarjeta;
 		this.detalleVenta = detalleVenta;
 	}
-
-
-
-
-
-
 	public Long getIdVenta() {
 		return idVenta;
 	}
 
-
-
 	public void setIdVenta(Long idVenta) {
 		this.idVenta = idVenta;
 	}
-
-
 
 	public List<DTODetalleVenta> getDetalleVenta() {
 		return detalleVenta;
@@ -98,3 +85,5 @@ public class DTOVentas implements Serializable{
 	
 
 }
+
+
