@@ -38,8 +38,8 @@ public class ClienteController {
 	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
 		Response cliente = service.buscarId(id);
-		if(cliente == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!cliente.isSuccess())
+			return new ResponseEntity<>(cliente, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(cliente, HttpStatus.OK);
 	}

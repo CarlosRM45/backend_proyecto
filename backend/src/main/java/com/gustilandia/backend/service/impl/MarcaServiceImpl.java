@@ -87,7 +87,13 @@ public class MarcaServiceImpl implements MarcaService{
 	@Override
 	public Response buscarId(Long id) {
 		
-		return new Response(true, repository.findById(id).get(), "");
+		Optional<Marca> marca = repository.findById(id);
+		
+		if(marca == null) {
+			return new Response(false, null, "No existe marca on ese id");
+		}
+		
+		return new Response(true, marca.get(), "");
 	}
 
 	@Override

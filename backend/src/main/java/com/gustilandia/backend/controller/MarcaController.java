@@ -40,8 +40,8 @@ public class MarcaController {
 	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
 		Response marca = service.buscarId(id);
-		if(marca == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(marca.getResult() == null)
+			return new ResponseEntity<>(marca, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(marca, HttpStatus.OK);
 	}

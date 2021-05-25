@@ -95,7 +95,12 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Override
 	public Response buscarId(Long id) {
 		
-		return new Response(true, repository.findById(id).get(), "");
+		Optional<Categoria> categoria = repository.findById(id);
+		if(!categoria.isPresent()) {
+			return new Response(false, null, "No existe categoria con ese id");
+		}
+		
+		return new Response(true, categoria.get(), "");
 	}
 
 	@Override
@@ -109,7 +114,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 		
 		Optional<Categoria> cat = repository.findById(id);
 
-		if(cat != null) {
+		if(!cat.isPresent()) {
 			return new Response(true, cat.get().getProductos(), "");
 		}
 		return new Response(false, null, "La categoria no existe");

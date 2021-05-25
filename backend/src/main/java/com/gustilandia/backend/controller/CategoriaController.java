@@ -41,8 +41,8 @@ public class CategoriaController {
 	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
 		Response cat = service.buscarId(id);
-		if(cat == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!cat.isSuccess())
+			return new ResponseEntity<>(cat, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(cat, HttpStatus.OK);
 		
@@ -52,8 +52,8 @@ public class CategoriaController {
 	public ResponseEntity<Response> buscarProductosCategoria(@PathVariable("id") Long id) {
 		
 		Response cat = service.listarProductoCategoria(id);
-		if(cat == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!cat.isSuccess())
+			return new ResponseEntity<>(cat, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(cat, HttpStatus.OK);
 		
@@ -69,8 +69,8 @@ public class CategoriaController {
 	public ResponseEntity<Response> actualizarId(@RequestBody @Valid DTOCategoria categoria) {
 		
 		Response _cat = service.buscarId(categoria.getIdCategoria());
-		if(_cat == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!_cat.isSuccess())
+			return new ResponseEntity<>(_cat, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(service.actualizar(categoria), HttpStatus.OK);
 		

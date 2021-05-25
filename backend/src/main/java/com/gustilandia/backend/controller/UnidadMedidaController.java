@@ -36,8 +36,8 @@ public class UnidadMedidaController {
 	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
 		Response unimed = service.buscarId(id);
-		if(unimed == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!unimed.isSuccess())
+			return new ResponseEntity<>(unimed, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(unimed, HttpStatus.OK);		
 	}
@@ -51,8 +51,8 @@ public class UnidadMedidaController {
 	public ResponseEntity<Response> actualizarId(@RequestBody UnidadMedida unimed) {
 		
 		Response _unimed = service.buscarId(unimed.getIdUnidadMedida());
-		if(_unimed == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!_unimed.isSuccess())
+			return new ResponseEntity<>(_unimed, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(service.actualizar(unimed), HttpStatus.OK);		
 	}

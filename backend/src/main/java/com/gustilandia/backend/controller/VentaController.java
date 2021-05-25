@@ -34,8 +34,8 @@ public class VentaController {
 	public ResponseEntity<Response> buscarId(@PathVariable("id") Long id) {
 		
 		Response venta = service.buscarId(id);
-		if(venta == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(!venta.isSuccess())
+			return new ResponseEntity<>(venta, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(venta, HttpStatus.OK);
 		

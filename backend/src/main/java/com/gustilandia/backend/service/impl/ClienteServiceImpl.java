@@ -53,6 +53,10 @@ public class ClienteServiceImpl implements ClienteService{
 		try {
 
 			Optional<Cliente> clie = repocliente.findById(clienteDto.getIdCliente());
+			
+			if(!clie.isPresent())
+				return new Response(false, null, "El cliente no existe.");
+			
 			Cliente _cliente = clie.get();
 
 			_cliente.setNombreCompleto(cliente.getNombreCompleto());
@@ -93,12 +97,14 @@ public class ClienteServiceImpl implements ClienteService{
 	@Override
 	public Response buscarId(Long id) {		
 
-		Cliente cliente = repocliente.findById(id).get();
+		Optional<Cliente> cliente = repocliente.findById(id);
 
-		if(cliente.getEstado().getIdEstado() != 1)
+		if(!cliente.isPresent())
+			return new Response(false, null, "El cliente no existe.");
+		if(cliente.get().getEstado().getIdEstado() != 1)
 			return new Response(false, null, "El cliente no existe.");
 
-		return new Response(true, cliente, "");
+		return new Response(true, cliente.get(), "");
 	}
 
 	@Override
