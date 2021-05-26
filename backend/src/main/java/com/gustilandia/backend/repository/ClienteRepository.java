@@ -13,4 +13,14 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
     @Modifying(clearAutomatically = true)
     @Query(value = "update cliente set id_estado = 2 where id_cliente =:id",nativeQuery = true)
     int deleteCliente(@Param("id") Long id);
+    
+    @Query(value = "select count(*) from cliente where numero_documento_identidad =:dni",nativeQuery = true)
+    int validateDNI(@Param("dni") String dni);
+
+    @Query(value = "select count(*) from cliente where correo =:email",nativeQuery = true)
+    int validateEmail(@Param("email") String email);
+
+    // @Query(value = "select count(*) from cliente where correo =:email and numero_documento_identidad =:dni",nativeQuery = true)
+    // int ValidateDNIandEmail(@Param("email") String email, @Param("dni") String dni);
+
 }

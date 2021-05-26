@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCliente;
 import com.gustilandia.backend.model.Cliente;
+import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
@@ -31,6 +32,21 @@ public class ClienteServiceImpl implements ClienteService{
 		Cliente cliente = new Cliente();
 
 		try {
+
+			if(repocliente.validateDNI(clienteDto.getNumeroDocumentoIdentidad()) > 0){
+				response.setMessage("Ya existe un cliente con este DNI");
+				return response;
+			}
+
+			if(repocliente.validateEmail(clienteDto.getCorreo()) > 0){
+				response.setMessage("Ya existe un cliente con este Email");
+				return response;
+			}
+
+			// if(repocliente.ValidateDNIandEmail(clienteDto.getCorreo(), clienteDto.getNumeroDocumentoIdentidad()) > 0){
+			// 	response.setMessage("Ya existe un cliente con esta informacion");
+			// 	return response;
+			// }
 
 			cliente = repocliente.save(mappingCliente(clienteDto));
 			response.setResult(cliente);
@@ -121,8 +137,11 @@ public class ClienteServiceImpl implements ClienteService{
 	
 	private Cliente mappingCliente(DTOCliente clienteDto){
 
+		Estado estado = new Estado();
+		estado.setIdEstado(1L);
+
 		Cliente cliente = mapper.map(clienteDto, Cliente.class);
-		cliente.getEstado().setIdEstado(1L);
+		cliente.setEstado(estado);;
 
 
 		if(clienteDto.getIdCliente() == 0)
