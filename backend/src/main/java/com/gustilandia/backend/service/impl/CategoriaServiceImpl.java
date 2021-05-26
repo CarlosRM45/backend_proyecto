@@ -78,18 +78,18 @@ public class CategoriaServiceImpl implements CategoriaService{
 	public Response eliminar(Long id) {
 		
 		Response response = new Response();
-		Optional<Categoria> cat = repository.findById(id);
 
-		if(cat != null) {
-			Categoria categoria = cat.get();
-			categoria.setIdEstado(2L);
-			repository.save(categoria);
-			response.setResult(true);
-			response.setMessage("Categoria eliminada");
-			return response;
+		try {
+			
+			repository.deleteCategoria(id);
+			response.setSuccess(true);
+			response.setMessage("El producto fue eliminado exitosamente.");
+
+		} catch (Exception e) {
+			response.setMessage("Hubo un error al eliminar el producto: " + e.getMessage());
 		}
 		
-		return new Response(false, null, "La categoria no existe");
+		return response;
 	}
 
 	@Override
