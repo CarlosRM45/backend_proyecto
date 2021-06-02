@@ -23,7 +23,7 @@ import com.gustilandia.backend.service.MarcaService;
 import com.gustilandia.backend.service.Response;
 
 
-@CrossOrigin(origins="http://localhost:4200",maxAge = 3600)
+@CrossOrigin()
 @RestController
 @RequestMapping("/marca")
 public class MarcaController {

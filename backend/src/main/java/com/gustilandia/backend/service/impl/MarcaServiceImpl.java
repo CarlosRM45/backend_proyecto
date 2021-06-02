@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOMarca;
 import com.gustilandia.backend.model.Marca;
+import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.MarcaRepository;
 import com.gustilandia.backend.service.MarcaService;
 import com.gustilandia.backend.service.Response;
@@ -44,24 +45,26 @@ public class MarcaServiceImpl implements MarcaService{
 	public Response actualizar(DTOMarca dtoMarca) {
 
 		Response response = new Response();
+		Marca marUpdate = mappingMarca(dtoMarca);
+	
+		try {
 
-		Optional<Marca> mar = repository.findById(dtoMarca.getIdMarca());
-
-		if(mar != null) {
+			Optional<Marca> mar = repository.findById(dtoMarca.getIdMarca());
+			Marca _marca = mar.get();
+		
 			
-			Marca marca = mar.get();
-			Marca marUpdate = mappingMarca(dtoMarca);
+			_marca.setFechaEdita(marUpdate.getFechaEdita());
+			_marca.setUsuarioEdita(marUpdate.getUsuarioEdita());
+			_marca.setNombreMarca(marUpdate.getNombreMarca());
 			
-			marca.setFechaEdita(marUpdate.getFechaEdita());
-			marca.setUsuarioEdita(marUpdate.getUsuarioEdita());
-			
-			response.setResult(repository.save(marca));
+			response.setResult(repository.save(_marca));
 			response.setSuccess(true);
 			response.setMessage("La Marca ha sido actualizada");
 			return response;
-		}
 
-		response.setMessage("La marca no existe.");
+		} catch (Exception e) {
+			response.setMessage("La marca no existe.");
+		}
 
 		return response;
 	}
@@ -106,12 +109,19 @@ public class MarcaServiceImpl implements MarcaService{
 	public Marca mappingMarca(DTOMarca dtoMarca) {
 		
 		Marca marca = mapper.map(dtoMarca, Marca.class);
-		//marca.setIdEstado(1L);
-		
-		if(marca.getIdMarca() == 0L || marca.getIdMarca() == null)
+		Usuario usuario = new Usuario();
+		usuario.setIdUsuario(1L);
+
+		if(marca.getIdMarca() != 0L){
             marca.setFechaEdita(new Date(System.currentTimeMillis()));
-		else
+			marca.setUsuarioEdita(usuario);
+			
+		}
+		else{
 			marca.setFechaCrea(new Date(System.currentTimeMillis()));
+			marca.setUsuarioCrea(usuario);
+		}
+		
 
 		return marca;
 		

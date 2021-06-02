@@ -20,7 +20,7 @@ import com.gustilandia.backend.dto.DTOProveedor;
 import com.gustilandia.backend.service.ProveedorService;
 import com.gustilandia.backend.service.Response;
 
-@CrossOrigin(origins = "*"/*origins= "http://localhost:4200"*/,maxAge = 3600)
+@CrossOrigin()
 @RestController
 @RequestMapping("/proveedor")
 public class ProveedorController {
