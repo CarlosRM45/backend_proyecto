@@ -70,6 +70,7 @@ public class SecurityConfiguration extends  WebSecurityConfigurerAdapter{
 						"/**/*.css",
 						"/**/*.js").permitAll()
 				.antMatchers("/auth/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/cliente/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
