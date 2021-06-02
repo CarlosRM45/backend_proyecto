@@ -2,6 +2,7 @@ package com.gustilandia.backend.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,7 +50,7 @@ public class Cliente {
 	@JoinColumn(name = "id_distrito")
 	private Distrito distrito;
 		
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 	

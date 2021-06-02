@@ -13,7 +13,10 @@ import com.gustilandia.backend.dto.DTOProveedor;
 import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Proveedor;
 import com.gustilandia.backend.model.Usuario;
+import com.gustilandia.backend.repository.EmpleadoRepository;
 import com.gustilandia.backend.repository.ProveedorRepository;
+import com.gustilandia.backend.security.JwtProvider;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.ProveedorService;
 import com.gustilandia.backend.service.Response;
 
@@ -22,6 +25,12 @@ public class ProveedorServiceImpl implements ProveedorService{
 	
 	@Autowired
 	private ProveedorRepository repository;
+	
+	@Autowired
+	private EmpleadoRepository repoEmpleado;
+	
+	@Autowired
+	private JwtProvider jwtProvider;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -128,8 +137,11 @@ public class ProveedorServiceImpl implements ProveedorService{
 		Proveedor proveedor = mapper.map(dtoProveedor, Proveedor.class);
 		proveedor.setEstado(estado);
 		
-		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(1L);
+		String token = TokenClientInterceptor.token;
+		token = token.replace("Bearer ", "");
+		String correo = jwtProvider.getUsuarioToken(token);
+		
+		Usuario usuario = repoEmpleado.findByCorreo(correo).get().getUsuario();
 		
 		if(dtoProveedor.getIdProveedor() == 0 || dtoProveedor.getIdProveedor() == null) {
 			proveedor.setFechaCrea(new Date(System.currentTimeMillis()));

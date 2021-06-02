@@ -6,13 +6,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCliente;
 import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Estado;
+import com.gustilandia.backend.model.Rol;
+import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.ClienteRepository;
+import com.gustilandia.backend.repository.RolRepository;
+import com.gustilandia.backend.repository.UsuarioRepository;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
 
@@ -21,9 +26,18 @@ public class ClienteServiceImpl implements ClienteService{
 	
 	@Autowired
 	private ClienteRepository repocliente;
+	
+	@Autowired
+	private RolRepository reporol;
 
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private UsuarioRepository repousuario;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Response registrar(DTOCliente clienteDto) {
@@ -47,6 +61,7 @@ public class ClienteServiceImpl implements ClienteService{
 			// 	response.setMessage("Ya existe un cliente con esta informacion");
 			// 	return response;
 			// }
+			
 
 			cliente = repocliente.save(mappingCliente(clienteDto));
 			response.setResult(cliente);
@@ -144,10 +159,21 @@ public class ClienteServiceImpl implements ClienteService{
 		cliente.setEstado(estado);;
 
 
-		if(clienteDto.getIdCliente() == 0)
+		if(clienteDto.getIdCliente() == 0) {
+			
 			cliente.setFechaCreacion(new Date(System.currentTimeMillis()));
-		
+			
+			Rol rol = reporol.findById(8L).get();
+			
+			Usuario usuario = new Usuario();
+			usuario.setUsuario(clienteDto.getCorreo());
+			usuario.setContrasenia(passwordEncoder.encode(clienteDto.getNumeroDocumentoIdentidad()));
+			usuario.setRol(rol);
+			
+			cliente.setUsuario(usuario);
+		}
 		
 		return cliente;
 	}
+
 }

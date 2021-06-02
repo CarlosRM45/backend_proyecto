@@ -22,7 +22,10 @@ import com.gustilandia.backend.dto.DTOProducto;
 import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.Usuario;
+import com.gustilandia.backend.repository.EmpleadoRepository;
 import com.gustilandia.backend.repository.ProductoRepository;
+import com.gustilandia.backend.security.JwtProvider;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.modelexample.ModelProducto;
@@ -32,6 +35,12 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Autowired
 	private ProductoRepository repository;
+	
+	@Autowired
+	private EmpleadoRepository repoEmpleado;
+	
+	@Autowired
+	private JwtProvider jwtProvider;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -216,15 +225,18 @@ public class ProductoServiceImpl implements ProductoService{
 		Estado estado = new Estado();
 		estado.setIdEstado(1L);
 		producto.setEstado(estado);
-		Usuario usuario = new Usuario();
+		
+		String token = TokenClientInterceptor.token;
+		token = token.replace("Bearer ", "");
+		String correo = jwtProvider.getUsuarioToken(token);
+		
+		Usuario usuario = repoEmpleado.findByCorreo(correo).get().getUsuario();
 
 		if(productoDto.getIdProducto() != 0){
 			producto.setFechaEdita(new Date(System.currentTimeMillis()));
-			usuario.setIdUsuario(1L);
 			producto.setUsuarioEdita(usuario);
 		}
 		else{
-			usuario.setIdUsuario(1L);
 			producto.setUsuarioCrea(usuario);
 			producto.setFechaCrea(new Date(System.currentTimeMillis()));
 		}

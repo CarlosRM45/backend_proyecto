@@ -2,6 +2,8 @@ package com.gustilandia.backend.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.dto.DTOCliente;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
 
@@ -29,8 +32,11 @@ public class ClienteController {
 	@Autowired
 	private ClienteService service;
 	
+	private final static Logger LOGGER = LoggerFactory.getLogger(ClienteController.class);
+	
 	@GetMapping()
 	public ResponseEntity<Response> listarUsuarios() {
+		LOGGER.info(TokenClientInterceptor.token);;
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	

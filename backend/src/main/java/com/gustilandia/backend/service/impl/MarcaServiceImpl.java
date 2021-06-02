@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.gustilandia.backend.dto.DTOMarca;
 import com.gustilandia.backend.model.Marca;
 import com.gustilandia.backend.model.Usuario;
+import com.gustilandia.backend.repository.EmpleadoRepository;
 import com.gustilandia.backend.repository.MarcaRepository;
+import com.gustilandia.backend.security.JwtProvider;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.MarcaService;
 import com.gustilandia.backend.service.Response;
 
@@ -19,6 +22,12 @@ public class MarcaServiceImpl implements MarcaService{
 	
 	@Autowired
 	private MarcaRepository repository;
+	
+	@Autowired
+	private EmpleadoRepository repoEmpleado;
+	
+	@Autowired
+	private JwtProvider jwtProvider;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -109,8 +118,12 @@ public class MarcaServiceImpl implements MarcaService{
 	public Marca mappingMarca(DTOMarca dtoMarca) {
 		
 		Marca marca = mapper.map(dtoMarca, Marca.class);
-		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(1L);
+		
+		String token = TokenClientInterceptor.token;
+		token = token.replace("Bearer ", "");
+		String correo = jwtProvider.getUsuarioToken(token);
+		
+		Usuario usuario = repoEmpleado.findByCorreo(correo).get().getUsuario();
 
 		if(marca.getIdMarca() != 0L){
             marca.setFechaEdita(new Date(System.currentTimeMillis()));

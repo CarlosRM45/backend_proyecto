@@ -1,5 +1,7 @@
 package com.gustilandia.backend.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,6 +21,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
     @Query(value = "select count(*) from cliente where correo =:email",nativeQuery = true)
     int validateEmail(@Param("email") String email);
+    
+    Optional<Cliente> findByCorreo(String correo);
 
     // @Query(value = "select count(*) from cliente where correo =:email and numero_documento_identidad =:dni",nativeQuery = true)
     // int ValidateDNIandEmail(@Param("email") String email, @Param("dni") String dni);
