@@ -1,7 +1,5 @@
 package com.gustilandia.backend.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.dto.DTOCategoria;
-import com.gustilandia.backend.model.Categoria;
-import com.gustilandia.backend.model.Producto;
-import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.service.CategoriaService;
 import com.gustilandia.backend.service.Response;
 
@@ -73,15 +68,13 @@ public class CategoriaController {
 		if(!_cat.isSuccess())
 			return new ResponseEntity<>(_cat, HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<Response>(service.actualizar(categoria), HttpStatus.OK);
-		
+		return new ResponseEntity<Response>(service.actualizar(categoria), HttpStatus.OK);	
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Response> eliminarCategoria(@PathVariable("id") Long id) {
 		
-		return new ResponseEntity<Response>(service.eliminar(id), HttpStatus.OK);
-		
+		return new ResponseEntity<Response>(service.eliminar(id), HttpStatus.OK);	
 	}
 	
 

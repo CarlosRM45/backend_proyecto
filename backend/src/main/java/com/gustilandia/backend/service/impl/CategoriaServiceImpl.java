@@ -8,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCategoria;
-import com.gustilandia.backend.dto.DTOVentas;
 import com.gustilandia.backend.model.Categoria;
-import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.repository.CategoriaRepository;
-import com.gustilandia.backend.repository.UsuarioRepository;
 import com.gustilandia.backend.service.CategoriaService;
 import com.gustilandia.backend.service.Response;
 
@@ -21,9 +18,6 @@ public class CategoriaServiceImpl implements CategoriaService{
 	
 	@Autowired
 	private CategoriaRepository repository;
-	
-	@Autowired
-	private UsuarioRepository repositoryUsuario;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -35,8 +29,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 		
 		try {
 			Categoria _categoria = mappingDtoCategoria(categoria);
-			_categoria = repository.save(_categoria);
-			response.setResult(_categoria);
+			response.setResult(repository.save(_categoria));
 			response.setSuccess(true);
 			response.setMessage("La categoria ha sido registrada");
 		} catch (Exception e) {
@@ -51,26 +44,25 @@ public class CategoriaServiceImpl implements CategoriaService{
 	public Response actualizar(DTOCategoria dtoCategoria) {
 
 		Response response = new Response();
+		Categoria catUpdate = mappingDtoCategoria(dtoCategoria);
+		
+		try {
+			Optional<Categoria> cat = repository.findById(dtoCategoria.getIdCategoria());
+			Categoria _categoria = cat.get();
 
-		Optional<Categoria> cat = repository.findById(dtoCategoria.getIdCategoria());
-
-		if(cat != null) {
+			_categoria.setCategoria(catUpdate.getCategoria());
+			_categoria.setFechaEdita(catUpdate.getFechaEdita());
+			_categoria.setUsuarioEdita(catUpdate.getUsuarioEdita());
 			
-			Categoria categoria = cat.get();
-			Categoria catUpdate = mappingDtoCategoria(dtoCategoria);
-			
-			categoria.setCategoria(catUpdate.getCategoria());
-			categoria.setFechaEdita(catUpdate.getFechaEdita());
-			categoria.setUsuarioEdita(catUpdate.getUsuarioEdita());
-			
-			response.setResult(repository.save(categoria));
+			response.setResult(repository.save(_categoria));
 			response.setSuccess(true);
 			response.setMessage("La Categoria ha sido actualizada");
 			return response;
+		} catch (Exception e) {
+
+			response.setMessage("La categoria no existe.");
 		}
-
-		response.setMessage("La categoria no existe.");
-
+		
 		return response;
 	}
 
@@ -83,7 +75,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 			
 			repository.deleteCategoria(id);
 			response.setSuccess(true);
-			response.setMessage("El producto fue eliminado exitosamente.");
+			response.setMessage("Categoria eliminada");
 
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al eliminar el producto: " + e.getMessage());

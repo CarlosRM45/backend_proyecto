@@ -86,8 +86,7 @@ public class MarcaServiceImpl implements MarcaService{
 
 		if(cat != null) {
 
-			Marca marca = cat.get();
-			repository.save(marca);
+			repository.deleteMarca(id);
 			response.setResult(true);
 			response.setMessage("Marca eliminada");
 			return response;
