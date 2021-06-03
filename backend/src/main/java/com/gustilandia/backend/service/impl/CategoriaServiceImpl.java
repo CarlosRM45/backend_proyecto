@@ -9,15 +9,25 @@ import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCategoria;
 import com.gustilandia.backend.model.Categoria;
+import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.CategoriaRepository;
+import com.gustilandia.backend.repository.EmpleadoRepository;
 import com.gustilandia.backend.service.CategoriaService;
 import com.gustilandia.backend.service.Response;
+import com.gustilandia.backend.security.JwtProvider;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService{
 	
 	@Autowired
 	private CategoriaRepository repository;
+
+	@Autowired
+	private EmpleadoRepository repoEmpleado;
+	
+	@Autowired
+	private JwtProvider jwtProvider;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -116,12 +126,22 @@ public class CategoriaServiceImpl implements CategoriaService{
 		
 		Categoria categoria = mapper.map(dtoCategoria, Categoria.class);
 		categoria.setIdEstado(1L);
-		
-		if(categoria.getIdCategoria() == 0L || categoria.getIdCategoria() == null)
-			categoria.setFechaEdita(new Date(System.currentTimeMillis()));
-		else
-			categoria.setFechaCrea(new Date(System.currentTimeMillis()));
 
+		String token = TokenClientInterceptor.token;
+		token = token.replace("Bearer ", "");
+		String correo = jwtProvider.getUsuarioToken(token);
+		Usuario usuario = repoEmpleado.findByCorreo(correo).get().getUsuario();
+		
+		if(categoria.getIdCategoria() != 0L){
+			categoria.setFechaEdita(new Date(System.currentTimeMillis()));
+			categoria.setUsuarioEdita(usuario);
+		}
+		else{
+			categoria.setFechaCrea(new Date(System.currentTimeMillis()));
+			categoria.setUsuarioCrea(usuario);
+		}
+
+		
 		return categoria;
 		
 	}

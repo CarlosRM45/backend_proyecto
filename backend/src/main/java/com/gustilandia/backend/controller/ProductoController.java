@@ -27,7 +27,7 @@ import com.gustilandia.backend.dto.DTOProducto;
 import com.gustilandia.backend.service.ProductoService;
 import com.gustilandia.backend.service.Response;
 
-@CrossOrigin(origins = "*"/*origins= "http://localhost:4200"*/,maxAge = 3600)
+@CrossOrigin()
 @RestController
 @RequestMapping("/producto")
 public class ProductoController {

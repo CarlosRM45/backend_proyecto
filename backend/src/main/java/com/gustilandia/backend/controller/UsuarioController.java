@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.security.JwtProvider;
 import com.gustilandia.backend.service.UsuarioService;
 
+@CrossOrigin()
 @RestController
 @RequestMapping("/auth")
 public class UsuarioController {

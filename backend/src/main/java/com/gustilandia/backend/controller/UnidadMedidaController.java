@@ -19,7 +19,7 @@ import com.gustilandia.backend.model.UnidadMedida;
 import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.UnidadMedidaService;
 
-@CrossOrigin(origins="http://localhost:4200",maxAge = 3600)
+@CrossOrigin()
 @RestController
 @RequestMapping("/unimed")
 public class UnidadMedidaController {
