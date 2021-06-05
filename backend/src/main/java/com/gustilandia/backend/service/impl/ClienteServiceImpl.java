@@ -96,6 +96,7 @@ public class ClienteServiceImpl implements ClienteService{
 			_cliente.setDireccion(cliente.getDireccion());
 			_cliente.setReferencia(cliente.getReferencia());
 			_cliente.setDistrito(cliente.getDistrito());
+			_cliente.getUsuario().setUsuario(cliente.getCorreo());
 	
 			response.setResult(repocliente.save(_cliente));
 			response.setSuccess(true);

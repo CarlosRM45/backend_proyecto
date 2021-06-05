@@ -69,8 +69,8 @@ public class SecurityConfiguration extends  WebSecurityConfigurerAdapter{
 						"/**/*.html",
 						"/**/*.css",
 						"/**/*.js").permitAll()
-				.antMatchers("/auth/**").permitAll()
-				.antMatchers(HttpMethod.POST, "/cliente/**").permitAll()
+				.antMatchers("/auth/login", "/auth/refresh").permitAll()
+				.antMatchers(/*HttpMethod.POST, */"/cliente/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(jwtEntryPoint)

@@ -1,10 +1,18 @@
 package com.gustilandia.backend.security;
 
+import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,9 +33,12 @@ public class JwtProvider {
 	public String generateToken(Authentication authentication){
 		
 		UsuarioJWT usuarioJwt = (UsuarioJWT) authentication.getPrincipal();
-		return Jwts.builder().setSubject(usuarioJwt.getUsername())
+		List<String> rol = usuarioJwt.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		return Jwts.builder()
+				.setSubject(usuarioJwt.getUsername())
+				.claim("rol", rol)
 				.setIssuedAt(new Date())
-				.setExpiration(new Date(new Date().getTime() + expiration * 1000))
+				.setExpiration(new Date(new Date().getTime() + expiration))
 				.signWith(SignatureAlgorithm.HS512, secret)
 				.compact();
 	}
@@ -54,6 +65,22 @@ public class JwtProvider {
 		}
 		
 		return false;
+	}
+	
+	public String refresh(String token) throws ParseException{
+		JWT jwt = JWTParser.parse(token);
+		JWTClaimsSet claims = jwt.getJWTClaimsSet();
+		String usuario = claims.getSubject();
+		List<String> rol = (List<String>) claims.getClaim("rol");
+		
+		return Jwts.builder()
+				.setSubject(usuario)
+				.claim("rol", rol)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(new Date().getTime() + expiration))
+				.signWith(SignatureAlgorithm.HS512, secret)
+				.compact();
+		
 	}
 
 }

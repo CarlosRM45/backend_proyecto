@@ -1,5 +1,6 @@
 package com.gustilandia.backend.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,15 +8,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.dto.DTOJwt;
 import com.gustilandia.backend.dto.DTOLogin;
+import com.gustilandia.backend.dto.DTOPerfil;
+import com.gustilandia.backend.dto.DTORefreshToken;
 import com.gustilandia.backend.model.Usuario;
-import com.gustilandia.backend.model.Venta;
-import com.gustilandia.backend.security.JwtProvider;
 import com.gustilandia.backend.service.UsuarioService;
 
 @CrossOrigin()
@@ -34,16 +29,7 @@ import com.gustilandia.backend.service.UsuarioService;
 public class UsuarioController {
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-	@Autowired
 	private UsuarioService service;
-	
-	@Autowired
-	private JwtProvider jwtProvider;
 	
 	@GetMapping()
 	public ResponseEntity<List<Usuario>> listarUsuarios() {
@@ -79,5 +65,18 @@ public class UsuarioController {
 		
 	}
 	
+	@PostMapping("/refresh")
+	public ResponseEntity<DTORefreshToken> RefreshToken(@Valid @RequestBody DTORefreshToken token) throws ParseException{
+		
+		return new ResponseEntity<DTORefreshToken>(service.refresh(token), HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/perfil")
+	public ResponseEntity<DTOPerfil> verPerfilCliente() {
+		
+		return new ResponseEntity<DTOPerfil>(service.verPerfilCliente(), HttpStatus.OK);
+		
+	}
 
 }
