@@ -1,5 +1,7 @@
 package com.gustilandia.backend.security;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -72,12 +74,14 @@ public class SecurityConfiguration extends  WebSecurityConfigurerAdapter{
 						"/**/*.js").permitAll()
 				.antMatchers("/files/img/producto/**").permitAll()
 				.antMatchers("/auth/login", "/auth/refresh").permitAll()
-				.antMatchers(/*HttpMethod.POST, */"/cliente/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/cliente/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
 				.and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.formLogin().disable();
 		
 		http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 				
