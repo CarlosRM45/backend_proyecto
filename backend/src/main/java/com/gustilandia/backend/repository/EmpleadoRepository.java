@@ -18,5 +18,9 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, Long>{
     int deleteEmpleado(@Param("id") Long id);
 	
 	Optional<Empleado> findByCorreo(String correo);
+	
+	boolean existsByCorreo(String correo);
+	
+	boolean existsByNumeroDocumentoIdentidad(String numero);
 
 }
