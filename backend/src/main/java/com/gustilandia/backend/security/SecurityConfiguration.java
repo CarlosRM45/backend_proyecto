@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -69,6 +70,7 @@ public class SecurityConfiguration extends  WebSecurityConfigurerAdapter{
 						"/**/*.html",
 						"/**/*.css",
 						"/**/*.js").permitAll()
+				.antMatchers("/files/img/producto/**").permitAll()
 				.antMatchers("/auth/login", "/auth/refresh").permitAll()
 				.antMatchers(/*HttpMethod.POST, */"/cliente/**").permitAll()
 				.anyRequest().authenticated()
@@ -79,6 +81,14 @@ public class SecurityConfiguration extends  WebSecurityConfigurerAdapter{
 		
 		http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 				
+		
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		
+		web.ignoring()
+			.antMatchers("/files/img/producto/**");
 		
 	}
 	

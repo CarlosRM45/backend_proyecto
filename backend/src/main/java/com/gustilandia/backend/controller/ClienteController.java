@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.dto.DTOCliente;
+import com.gustilandia.backend.dto.DTOJwt;
+import com.gustilandia.backend.dto.DTOLogin;
 import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
+import com.gustilandia.backend.service.UsuarioService;
 
 
 @CrossOrigin(origins="http://localhost:4200",maxAge = 3600)
@@ -32,11 +35,11 @@ public class ClienteController {
 	@Autowired
 	private ClienteService service;
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(ClienteController.class);
+	@Autowired
+	private UsuarioService serviceUsuario;
 	
 	@GetMapping()
 	public ResponseEntity<Response> listarUsuarios() {
-		LOGGER.info(TokenClientInterceptor.token);;
 		return new ResponseEntity<>(service.listar(), HttpStatus.OK);
 	}
 	
@@ -52,7 +55,19 @@ public class ClienteController {
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registrarCliente(@RequestBody @Valid DTOCliente cliente) {
-		return new ResponseEntity<>(service.registrar(cliente), HttpStatus.OK);
+		
+		Response response = service.registrar(cliente);
+		if(!response.isSuccess()) {
+			return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+		}	
+		
+		DTOLogin dtoLogin = new DTOLogin();
+		dtoLogin.setUsuario(cliente.getCorreo());
+		dtoLogin.setContrasenia(cliente.getNumeroDocumentoIdentidad());
+		
+		DTOJwt dtoJwt = serviceUsuario.login(dtoLogin);
+		
+		return new ResponseEntity<>(new Response(true, dtoJwt, "Cliente registrado exitosamente"), HttpStatus.OK);
 	}
 
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
