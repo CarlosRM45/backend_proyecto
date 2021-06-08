@@ -1,12 +1,15 @@
 package com.gustilandia.backend.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 import com.gustilandia.backend.dto.DTOEmpleado;
 import com.gustilandia.backend.model.Empleado;
@@ -139,8 +142,20 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 	@Override
 	public Response listar() {
 
-		return new Response(true, repoempleado.findAll(), "");
+		List<Empleado> listadoProductos = repoempleado.findAll().stream()
+				.filter(producto -> producto.getEstado().getIdEstado() == 1)
+				.collect(Collectors.toList());
+
+		return new Response(true, listadoProductos , "");
 	}
+
+	@Override
+	public Response listarRol() {
+
+		return new Response(true, reporol.findAll() , "");
+	}
+
+
 	
 	private Empleado mappingEmpleado(DTOEmpleado dtoEmpleado) {
 		

@@ -157,7 +157,7 @@ public class ClienteServiceImpl implements ClienteService{
 		estado.setIdEstado(1L);
 
 		Cliente cliente = mapper.map(clienteDto, Cliente.class);
-		cliente.setEstado(estado);;
+		cliente.setEstado(estado);
 
 
 		if(clienteDto.getIdCliente() == 0) {

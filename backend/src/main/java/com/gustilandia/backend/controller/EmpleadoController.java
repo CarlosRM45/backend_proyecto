@@ -32,6 +32,11 @@ public class EmpleadoController {
 	public ResponseEntity<Response> listarEmpleados(){
 		return new ResponseEntity<Response>(service.listar(), HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/rol")
+	public ResponseEntity<Response> listarRol(){
+		return new ResponseEntity<Response>(service.listarRol(), HttpStatus.OK);
+	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registrarEmpleado(@RequestBody @Valid DTOEmpleado dtoEmpleado){
@@ -48,8 +53,7 @@ public class EmpleadoController {
 			return new ResponseEntity<Response>(empleado, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Response>(empleado, HttpStatus.OK);
-		
+		return new ResponseEntity<Response>(empleado, HttpStatus.OK);		
 	}
 	
 	@PutMapping
@@ -72,8 +76,7 @@ public class EmpleadoController {
 			return new ResponseEntity<Response>(new Response(false, null, "El empleado no existe"),HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Response>(service.eliminar(id), HttpStatus.OK);
-		
+		return new ResponseEntity<Response>(service.eliminar(id), HttpStatus.OK);	
 	}
 	
 
