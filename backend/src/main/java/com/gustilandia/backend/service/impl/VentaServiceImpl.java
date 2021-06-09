@@ -13,11 +13,16 @@ import com.gustilandia.backend.dto.DTODetalleVenta;
 import com.gustilandia.backend.dto.DTOTarjeta;
 import com.gustilandia.backend.dto.DTOVentaCarrito;
 import com.gustilandia.backend.dto.DTOVentas;
+import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Tarjeta;
+import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.model.VentaDetalle;
+import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.repository.ProductoRepository;
 import com.gustilandia.backend.repository.VentaRepository;
+import com.gustilandia.backend.security.JwtProvider;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.VentaService;
 
@@ -32,6 +37,12 @@ public class VentaServiceImpl implements VentaService{
 	
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private JwtProvider jwtProvider;
+	
+	@Autowired
+	private ClienteRepository clienterepo;
 
 	@Override
 	public Response registrar(DTOVentas dtoVenta) {
@@ -177,6 +188,13 @@ public class VentaServiceImpl implements VentaService{
 		Venta venta = mapper.map(dtoVenta, Venta.class);
 		venta.setIdEstado(1L);
 		venta.setFechaVentaGuardada(new Date(System.currentTimeMillis()));
+		
+		String token = TokenClientInterceptor.token;
+		token = token.replace("Bearer ", "");
+		String correo = jwtProvider.getUsuarioToken(token);
+		Cliente cliente = clienterepo.findByCorreo(correo).get();
+		
+		venta.setCliente(cliente);
 
 		return venta;
 		

@@ -6,6 +6,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.gustilandia.backend.validation.Stock;
+
 public class DTODetalleVenta implements Serializable{
 	
 	/**
@@ -14,10 +16,8 @@ public class DTODetalleVenta implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull(message = "Debe seleccionar un producto")
-	@NotBlank(message = "Debe seleccionar un producto")
+	@Min(value = 1, message = "Debe seleccionar un producto")
 	private Long idProducto;
-	
-	private Double precio;
 	
 	private Double porcentajeDescuento;
 	
@@ -27,9 +27,8 @@ public class DTODetalleVenta implements Serializable{
 	public DTODetalleVenta() {
 	}
 	
-	public DTODetalleVenta(Long idProducto, Double precio, Double porcentajeDescuento, int cantidad) {
+	public DTODetalleVenta(Long idProducto, Double porcentajeDescuento, int cantidad) {
 		this.idProducto = idProducto;
-		this.precio = precio;
 		this.porcentajeDescuento = porcentajeDescuento;
 		this.cantidad = cantidad;
 	}
@@ -39,12 +38,6 @@ public class DTODetalleVenta implements Serializable{
 	}
 	public void setIdProducto(Long idProducto) {
 		this.idProducto = idProducto;
-	}
-	public Double getPrecio() {
-		return precio;
-	}
-	public void setPrecio(Double precio) {
-		this.precio = precio;
 	}
 	public Double getPorcentajeDescuento() {
 		return porcentajeDescuento;

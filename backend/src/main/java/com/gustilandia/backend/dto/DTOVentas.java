@@ -3,8 +3,12 @@ package com.gustilandia.backend.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import com.gustilandia.backend.validation.Stock;
+
 
 public class DTOVentas implements Serializable{
 	
@@ -18,25 +22,27 @@ public class DTOVentas implements Serializable{
 	private Long idTipoComprobanteSunat;
 	
 	private String correlativoComprobante;
-	private Long idCliente;
 	
 	private DTOTarjeta tarjeta;
 	
-	private List<DTODetalleVenta> detalleVenta;
+	private List<@Valid DTODetalleVenta> detalleVenta;
 	
 	public DTOVentas() {
 	}
 	
-	public DTOVentas(Long idVenta, int nroVenta, Long idTipoComprobanteSunat, String correlativoComprobante,
-			Long idCliente, DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
+
+	public DTOVentas(Long idVenta, @NotNull(message = "Debe ingresar un numero de Venta") int nroVenta,
+			@NotNull(message = "Seleccione un tipo de comprobante") @Min(value = 1, message = "Seleccione un tipo de comprobante") Long idTipoComprobanteSunat,
+			String correlativoComprobante, DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
 		this.idVenta = idVenta;
 		this.nroVenta = nroVenta;
 		this.idTipoComprobanteSunat = idTipoComprobanteSunat;
 		this.correlativoComprobante = correlativoComprobante;
-		this.idCliente = idCliente;
 		this.tarjeta = tarjeta;
 		this.detalleVenta = detalleVenta;
 	}
+
+
 	public Long getIdVenta() {
 		return idVenta;
 	}
@@ -68,12 +74,6 @@ public class DTOVentas implements Serializable{
 	}
 	public void setCorrelativoComprobante(String correlativoComprobante) {
 		this.correlativoComprobante = correlativoComprobante;
-	}
-	public Long getIdCliente() {
-		return idCliente;
-	}
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
 	}
 	public DTOTarjeta getTarjeta() {
 		return tarjeta;

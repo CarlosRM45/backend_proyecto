@@ -38,7 +38,7 @@ public class Venta {
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_tarjeta")
 	private Tarjeta tarjeta;
 	
