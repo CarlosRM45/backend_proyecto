@@ -40,7 +40,6 @@ public class VentaController {
 			return new ResponseEntity<>(venta, HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(venta, HttpStatus.OK);
-		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -97,6 +97,7 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 			_empleado.setCodigoVendedor(empleado.getCodigoVendedor());
 			_empleado.setCorreo(empleado.getCorreo());
 			_empleado.getUsuario().setUsuario(empleado.getCorreo());
+			_empleado.getUsuario().setRol(empleado.getUsuario().getRol());
 			
 			response.setResult(repoempleado.save(_empleado));
 			response.setSuccess(true);
@@ -174,6 +175,12 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 		if(dtoEmpleado.getIdEmpleado() != 0) {
 			empleado.setFechaEdita(new Date(System.currentTimeMillis()));
 			empleado.setUsuarioEdita(usuario);
+
+			Rol rol = reporol.findById(dtoEmpleado.getIdRol()).get();
+			Usuario nuevousuario = new Usuario();
+			nuevousuario.setRol(rol);
+			empleado.setUsuario(nuevousuario);
+
 		}else {
 			empleado.setFechaCrea(new Date(System.currentTimeMillis()));
 			empleado.setUsuarioCrea(usuario);
