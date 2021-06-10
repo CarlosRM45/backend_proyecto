@@ -28,8 +28,8 @@ public class Venta {
 	@Column(name = "numero_venta")
 	private int numeroVenta;
 	
-	@Column(name = "id_tipo_comprobante_sunat")
-	private Long idTipoComprobanteSunat;
+	// @Column(name = "id_tipo_comprobante_sunat")
+	// private Long idTipoComprobanteSunat;
 	
 	@Column(name = "correlativo_comprobante")
 	private String correlativoComprobante;
@@ -54,13 +54,55 @@ public class Venta {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_venta_guardada")
 	private Date fechaVentaGuardada;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fecha_entrega")
+	private Date fechaEntrega;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fecha_creacion")
+	private Date fechaCreacion;
 	
-	@Column(name = "id_estado")
-	private Long idEstado;
+	@ManyToOne
+	@JoinColumn(name = "id_estado")
+	private Estado estado;
+
+	@ManyToOne
+	@JoinColumn(name = "id_tipo_comprobante_sunat")
+	private TipoComprobanteSunat tipoComprobanteSunat;
+
 	
+
 	
 	@OneToMany(mappedBy = "venta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private List<VentaDetalle> ventaDetalle;
+
+
+
+	
+	public Date getFechEntrega() {
+		return fechaEntrega;
+	}
+
+	public void setFechEntrega(Date fechaEntrega) {
+		this.fechaEntrega = fechaEntrega;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
 
 	public Long getIdVenta() {
 		return idVenta;
@@ -78,13 +120,13 @@ public class Venta {
 		this.numeroVenta = numeroVenta;
 	}
 
-	public Long getIdTipoComprobanteSunat() {
-		return idTipoComprobanteSunat;
-	}
+	// public Long getIdTipoComprobanteSunat() {
+	// 	return idTipoComprobanteSunat;
+	// }
 
-	public void setIdTipoComprobanteSunat(Long idTipoComprobanteSunat) {
-		this.idTipoComprobanteSunat = idTipoComprobanteSunat;
-	}
+	// public void setIdTipoComprobanteSunat(Long idTipoComprobanteSunat) {
+	// 	this.idTipoComprobanteSunat = idTipoComprobanteSunat;
+	// }
 
 	public String getCorrelativoComprobante() {
 		return correlativoComprobante;
@@ -142,13 +184,6 @@ public class Venta {
 		this.fechaVentaGuardada = fechaVentaGuardada;
 	}
 
-	public Long getIdEstado() {
-		return idEstado;
-	}
-
-	public void setIdEstado(Long idEstado) {
-		this.idEstado = idEstado;
-	}
 
 	public List<VentaDetalle> getVentaDetalle() {
 		return ventaDetalle;

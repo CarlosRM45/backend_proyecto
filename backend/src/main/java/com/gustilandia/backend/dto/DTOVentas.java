@@ -7,8 +7,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import com.gustilandia.backend.validation.Stock;
-
 
 public class DTOVentas implements Serializable{
 	

@@ -87,7 +87,7 @@ public class VentaServiceImpl implements VentaService{
 			Optional<Venta> ventaOpt = ventarepo.findById(venta.getIdVenta());
 			Venta _venta = ventaOpt.get();
 			_venta.setNroVenta(venta.getNroVenta());
-			_venta.setIdTipoComprobanteSunat(venta.getIdTipoComprobanteSunat());
+			//_venta.setIdTipoComprobanteSunat(venta.getIdTipoComprobanteSunat());
 			_venta.setCorrelativoComprobante(venta.getCorrelativoComprobante());
 			_venta.setCliente(venta.getCliente());
 			_venta.setTarjeta(venta.getTarjeta());
@@ -112,7 +112,7 @@ public class VentaServiceImpl implements VentaService{
 			
 			if(ventaOpt != null) {
 				Venta venta = ventaOpt.get();
-				venta.setIdEstado(2L);
+				//venta.setIdEstado(2L);
 				ventarepo.save(venta);
 				
 				response.setSuccess(true);
@@ -131,7 +131,7 @@ public class VentaServiceImpl implements VentaService{
 	public Response buscarId(Long id) {
 		
 		Venta venta = ventarepo.findById(id).get();
-		if(venta.getIdEstado() != 1)
+		if(venta.getEstado().getIdEstado() != 1)
 			return new Response(false, null, "La venta no existe.");
 		
 		return new Response(true, venta, "");
@@ -139,10 +139,7 @@ public class VentaServiceImpl implements VentaService{
 
 	@Override
 	public Response listar() {
-		List<Venta> ventas = ventarepo.findAll().stream()
-				.filter(venta -> venta.getIdEstado() == 1)
-				.collect(Collectors.toList());
-		return new Response(true, ventas, "");
+		return new Response(true, ventarepo.findAll(), "");
 	}
 
 	@Override
@@ -186,7 +183,7 @@ public class VentaServiceImpl implements VentaService{
 	public Venta mappingDtoVenta(DTOVentas dtoVenta) {
 		
 		Venta venta = mapper.map(dtoVenta, Venta.class);
-		venta.setIdEstado(1L);
+		//venta.setIdEstado(1L);
 		venta.setFechaVentaGuardada(new Date(System.currentTimeMillis()));
 		
 		String token = TokenClientInterceptor.token;
