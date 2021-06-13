@@ -79,9 +79,12 @@ public class Venta {
 	private List<VentaDetalle> ventaDetalle;
 
 
+<<<<<<< HEAD
 
 
 	
+=======
+>>>>>>> refs/remotes/origin/master
 	public Empleado getRepartidor() {
 		return repartidor;
 	}
