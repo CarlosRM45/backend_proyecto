@@ -67,7 +67,7 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 			empleado = repoempleado.save(mappingEmpleado(dtoEmpleado));
 			response.setResult(empleado);
 			response.setMessage("Empleado registrado satisfactioramente");
-			response.setResult(true);
+			response.setSuccess(true);
 			
 		} catch (Exception e) {
 			response.setMessage("Error al registrar el empleado" + e.getMessage());

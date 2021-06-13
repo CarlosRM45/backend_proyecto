@@ -28,8 +28,9 @@ public class Venta {
 	@Column(name = "numero_venta")
 	private int numeroVenta;
 	
-	// @Column(name = "id_tipo_comprobante_sunat")
-	// private Long idTipoComprobanteSunat;
+	@ManyToOne
+	@JoinColumn(name = "id_repartidor")
+	private Usuario repartidor;
 	
 	@Column(name = "correlativo_comprobante")
 	private String correlativoComprobante;
@@ -79,7 +80,16 @@ public class Venta {
 
 
 
+
 	
+	public Usuario getRepartidor() {
+		return repartidor;
+	}
+
+	public void setRepartidor(Usuario repartidor) {
+		this.repartidor = repartidor;
+	}
+
 	public Date getFechEntrega() {
 		return fechaEntrega;
 	}

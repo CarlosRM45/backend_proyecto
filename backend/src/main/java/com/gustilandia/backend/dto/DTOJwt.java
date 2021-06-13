@@ -8,6 +8,7 @@ public class DTOJwt {
 	
 	private String token;
 	private String usuario;
+	private Long idRol;
 	private String rol;
 	private Long id;
 	private String nombre;
@@ -21,6 +22,13 @@ public class DTOJwt {
 		this.rol = authorities.toString();
 	}
 	
+
+	public Long getIdRol() {
+		return idRol;
+	}
+	public void setIdRol(Long idRol) {
+		this.idRol = idRol;
+	}
 	public String getToken() {
 		return token;
 	}

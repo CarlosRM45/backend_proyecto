@@ -81,6 +81,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 		Optional<Cliente> _cliente = repoCliente.findByCorreo(dtoJwt.getUsuario());
 		if(_empleado.isPresent()) {
 			dtoJwt.setId(_empleado.get().getIdEmpleado());
+			dtoJwt.setIdRol(_empleado.get().getUsuario().getRol().getIdRol());
 			dtoJwt.setNombre(_empleado.get().getNombres() + " " + _empleado.get().getApellidos());
 		}else {
 			dtoJwt.setId(_cliente.get().getIdCliente());

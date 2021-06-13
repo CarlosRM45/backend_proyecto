@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.gustilandia.backend.dto.DTODetalleVenta;
 import com.gustilandia.backend.dto.DTOTarjeta;
 import com.gustilandia.backend.dto.DTOVentaCarrito;
+import com.gustilandia.backend.dto.DTOVentaEstado;
 import com.gustilandia.backend.dto.DTOVentas;
 import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Tarjeta;
@@ -128,18 +129,56 @@ public class VentaServiceImpl implements VentaService{
 	}
 
 	@Override
+	public Response anular(Long id) {
+
+		Response response = new Response();
+
+		try {
+			
+			ventarepo.anular(id);
+			response.setSuccess(true);
+			response.setMessage("La venta fue anulada.");
+
+		} catch (Exception e) {
+			response.setMessage("Hubo un error al anular la venta: " + e.getMessage());
+		}
+		
+		return response;
+	}
+
+	@Override
 	public Response buscarId(Long id) {
 		
 		Venta venta = ventarepo.findById(id).get();
-		if(venta.getEstado().getIdEstado() != 1)
-			return new Response(false, null, "La venta no existe.");
-		
 		return new Response(true, venta, "");
 	}
 
 	@Override
 	public Response listar() {
 		return new Response(true, ventarepo.findAll(), "");
+	}
+
+	@Override
+	public Response listarVentasPorRol(Long idRol, Long idUsuario) {
+
+		
+		List<Venta> listadoVentas = ventarepo.findAll();
+
+		if(idRol == 2)
+		{
+			listadoVentas = listadoVentas.stream()
+										.filter(venta -> venta.getEstado().getIdEstado() == 6)
+										.collect(Collectors.toList());
+		}
+
+		if(idRol == 5)
+		{
+			listadoVentas = listadoVentas.stream()
+										.filter(venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdUsuario() == idUsuario)
+										.collect(Collectors.toList());
+		}
+
+		return new Response(true, listadoVentas, "");
 	}
 
 	@Override
@@ -161,6 +200,8 @@ public class VentaServiceImpl implements VentaService{
 		return response;
 	}
 
+	
+
 	@Override
 	public Response aumentarCantidadProducto(DTOVentaCarrito dtoVentaCarrito) {
 		
@@ -175,6 +216,25 @@ public class VentaServiceImpl implements VentaService{
 
 		} catch (Exception e) {
 			response.setMessage("Ocurrio un error al aumentar la cantidad del carrito: " + e.getMessage());
+		}
+
+		return response;
+	}
+
+	@Override
+	public Response cambiarEstadoVenta(DTOVentaEstado dtoVentaEstado) {
+		
+		Response response = new Response();
+
+		try {
+			
+			ventarepo.cambiarEstadoVenta(dtoVentaEstado.getIdVenta(), dtoVentaEstado.getIdRepartidor(), dtoVentaEstado.getIdEstado());
+			Venta venta = ventarepo.findById(dtoVentaEstado.getIdVenta()).get();
+			response.setResult(venta);
+			response.setSuccess(true);
+
+		} catch (Exception e) {
+			response.setMessage("Ocurrio un error al crear la venta del carrito: " + e.getMessage());
 		}
 
 		return response;
@@ -210,6 +270,8 @@ public class VentaServiceImpl implements VentaService{
 		return tarjeta;
 		
 	}
+
+	
 
 	
 
