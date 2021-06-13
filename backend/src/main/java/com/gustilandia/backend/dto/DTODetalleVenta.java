@@ -17,17 +17,14 @@ public class DTODetalleVenta implements Serializable{
 	@Min(value = 1, message = "Debe seleccionar un producto")
 	private Long idProducto;
 	
-	private Double porcentajeDescuento;
-	
 	@Min(value = 1, message = "La cantidad minima de pedido es 1")
 	private int cantidad;
 	
 	public DTODetalleVenta() {
 	}
 	
-	public DTODetalleVenta(Long idProducto, Double porcentajeDescuento, int cantidad) {
+	public DTODetalleVenta(Long idProducto, int cantidad) {
 		this.idProducto = idProducto;
-		this.porcentajeDescuento = porcentajeDescuento;
 		this.cantidad = cantidad;
 	}
 	
@@ -36,12 +33,6 @@ public class DTODetalleVenta implements Serializable{
 	}
 	public void setIdProducto(Long idProducto) {
 		this.idProducto = idProducto;
-	}
-	public Double getPorcentajeDescuento() {
-		return porcentajeDescuento;
-	}
-	public void setPorcentajeDescuento(Double porcentajeDescuento) {
-		this.porcentajeDescuento = porcentajeDescuento;
 	}
 	public int getCantidad() {
 		return cantidad;

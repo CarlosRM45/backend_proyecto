@@ -30,9 +30,6 @@ public class VentaDetalle {
 	@Column(name = "precio")
 	private Double precio;
 	
-	@Column(name = "porcentaje_descuento")
-	private Double porcentajeDescuento;
-	
 	@Column(name = "cantidad")
 	private int cantidad;
 
@@ -58,14 +55,6 @@ public class VentaDetalle {
 
 	public void setPrecio(Double precio) {
 		this.precio = precio;
-	}
-
-	public Double getPorcentajeDescuento() {
-		return porcentajeDescuento;
-	}
-
-	public void setPorcentajeDescuento(Double porcentajeDescuento) {
-		this.porcentajeDescuento = porcentajeDescuento;
 	}
 
 	public int getCantidad() {

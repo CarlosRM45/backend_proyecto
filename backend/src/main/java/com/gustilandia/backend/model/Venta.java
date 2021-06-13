@@ -30,7 +30,7 @@ public class Venta {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_repartidor")
-	private Usuario repartidor;
+	private Empleado repartidor;
 	
 	@Column(name = "correlativo_comprobante")
 	private String correlativoComprobante;
@@ -75,18 +75,18 @@ public class Venta {
 	
 
 	
-	@OneToMany(mappedBy = "venta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "venta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private List<VentaDetalle> ventaDetalle;
 
 
 
 
 	
-	public Usuario getRepartidor() {
+	public Empleado getRepartidor() {
 		return repartidor;
 	}
 
-	public void setRepartidor(Usuario repartidor) {
+	public void setRepartidor(Empleado repartidor) {
 		this.repartidor = repartidor;
 	}
 
@@ -201,6 +201,30 @@ public class Venta {
 
 	public void setVentaDetalle(List<VentaDetalle> ventaDetalle) {
 		this.ventaDetalle = ventaDetalle;
+	}
+
+	public int getNumeroVenta() {
+		return numeroVenta;
+	}
+
+	public void setNumeroVenta(int numeroVenta) {
+		this.numeroVenta = numeroVenta;
+	}
+
+	public Date getFechaEntrega() {
+		return fechaEntrega;
+	}
+
+	public void setFechaEntrega(Date fechaEntrega) {
+		this.fechaEntrega = fechaEntrega;
+	}
+
+	public TipoComprobanteSunat getTipoComprobanteSunat() {
+		return tipoComprobanteSunat;
+	}
+
+	public void setTipoComprobanteSunat(TipoComprobanteSunat tipoComprobanteSunat) {
+		this.tipoComprobanteSunat = tipoComprobanteSunat;
 	}
 	
 	

@@ -1,9 +1,12 @@
 package com.gustilandia.backend.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,10 @@ import com.gustilandia.backend.dto.DTOVentaCarrito;
 import com.gustilandia.backend.dto.DTOVentaEstado;
 import com.gustilandia.backend.dto.DTOVentas;
 import com.gustilandia.backend.model.Cliente;
+import com.gustilandia.backend.model.Estado;
+import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.Tarjeta;
+import com.gustilandia.backend.model.TipoComprobanteSunat;
 import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.model.VentaDetalle;
@@ -45,11 +51,15 @@ public class VentaServiceImpl implements VentaService{
 	@Autowired
 	private ClienteRepository clienterepo;
 
+	@Transactional
 	@Override
 	public Response registrar(DTOVentas dtoVenta) {
 		
 		Response response = new Response();
 		Venta venta = mappingDtoVenta(dtoVenta);
+		boolean stock = true;
+		List<String> errorStock = new ArrayList<String>();
+		
 		try {
 			
 			double subtotal = 0.0;
@@ -57,11 +67,22 @@ public class VentaServiceImpl implements VentaService{
 			double dettotal = 0.0;
 			
 			for(VentaDetalle det:venta.getVentaDetalle()) {
+				Producto producto = productorepo.findById(det.getProducto().getIdProducto()).get();
 				det.setVenta(venta);
-				det.setProducto(productorepo.findById(det.getProducto().getIdProducto()).get());
+				det.setProducto(producto);
 				det.setPrecio(det.getProducto().getPrecio());
 				dettotal = det.getPrecio() * det.getCantidad();
 				subtotal += dettotal;
+				if(det.getCantidad()>producto.getStock()) {
+					stock = false;
+					errorStock.add("No hay suficiente Stock de " + producto.getProducto());
+				}
+			}
+			
+			if(!stock) {
+				return new Response(false, errorStock, "No hay suficiente stock de algunos productos");
+			}else {
+				cambiarStock(venta.getVentaDetalle(), false);
 			}
 			
 			venta.setSubtotal(subtotal);
@@ -135,9 +156,15 @@ public class VentaServiceImpl implements VentaService{
 
 		try {
 			
+			Optional<Venta> optVenta = ventarepo.findById(id);
+			if(!optVenta.isPresent()) 
+				return new Response(false, null, "No existe venta con el id: " + id);
+			
 			ventarepo.anular(id);
 			response.setSuccess(true);
 			response.setMessage("La venta fue anulada.");
+			
+			cambiarStock(optVenta.get().getVentaDetalle(), true);
 
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al anular la venta: " + e.getMessage());
@@ -174,7 +201,7 @@ public class VentaServiceImpl implements VentaService{
 		if(idRol == 5)
 		{
 			listadoVentas = listadoVentas.stream()
-										.filter(venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdUsuario() == idUsuario)
+										.filter(venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdEmpleado() == idUsuario)
 										.collect(Collectors.toList());
 		}
 
@@ -231,6 +258,7 @@ public class VentaServiceImpl implements VentaService{
 			ventarepo.cambiarEstadoVenta(dtoVentaEstado.getIdVenta(), dtoVentaEstado.getIdRepartidor(), dtoVentaEstado.getIdEstado());
 			Venta venta = ventarepo.findById(dtoVentaEstado.getIdVenta()).get();
 			response.setResult(venta);
+			response.setMessage("Se ha actualizado el estado de la venta.");
 			response.setSuccess(true);
 
 		} catch (Exception e) {
@@ -243,7 +271,15 @@ public class VentaServiceImpl implements VentaService{
 	public Venta mappingDtoVenta(DTOVentas dtoVenta) {
 		
 		Venta venta = mapper.map(dtoVenta, Venta.class);
-		//venta.setIdEstado(1L);
+		
+		Estado estado = new Estado();
+		estado.setIdEstado(4L);
+		
+		TipoComprobanteSunat tipoComprobanteSunat = new TipoComprobanteSunat();
+		tipoComprobanteSunat.setIdTipoComprobanteSunat(dtoVenta.getIdTipoComprobanteSunat());
+		
+		venta.setTipoComprobanteSunat(tipoComprobanteSunat);
+		venta.setEstado(estado);
 		venta.setFechaVentaGuardada(new Date(System.currentTimeMillis()));
 		
 		String token = TokenClientInterceptor.token;
@@ -272,7 +308,23 @@ public class VentaServiceImpl implements VentaService{
 	}
 
 	
-
+	public void cambiarStock(List<VentaDetalle> listado, boolean aumentar) {
+		
+		if(!aumentar) {
+			for (VentaDetalle detalle : listado) {
+				Producto prod = productorepo.findById(detalle.getProducto().getIdProducto()).get();
+				prod.setStock(prod.getStock() - detalle.getCantidad());
+				productorepo.save(prod);
+			}
+		}else {
+			for (VentaDetalle detalle : listado) {
+				Producto prod = productorepo.findById(detalle.getProducto().getIdProducto()).get();
+				prod.setStock(prod.getStock() + detalle.getCantidad());
+				productorepo.save(prod);
+			}
+		}
+		
+	}
 	
 
 }
