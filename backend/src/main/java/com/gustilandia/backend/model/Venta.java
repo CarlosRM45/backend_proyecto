@@ -75,16 +75,10 @@ public class Venta {
 	
 
 	
-	@OneToMany(mappedBy = "venta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "venta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private List<VentaDetalle> ventaDetalle;
 
 
-<<<<<<< HEAD
-
-
-	
-=======
->>>>>>> refs/remotes/origin/master
 	public Empleado getRepartidor() {
 		return repartidor;
 	}
