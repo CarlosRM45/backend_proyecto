@@ -200,22 +200,6 @@ public class Venta {
 		this.ventaDetalle = ventaDetalle;
 	}
 
-	public int getNumeroVenta() {
-		return numeroVenta;
-	}
-
-	public void setNumeroVenta(int numeroVenta) {
-		this.numeroVenta = numeroVenta;
-	}
-
-	public Date getFechaEntrega() {
-		return fechaEntrega;
-	}
-
-	public void setFechaEntrega(Date fechaEntrega) {
-		this.fechaEntrega = fechaEntrega;
-	}
-
 	public TipoComprobanteSunat getTipoComprobanteSunat() {
 		return tipoComprobanteSunat;
 	}
