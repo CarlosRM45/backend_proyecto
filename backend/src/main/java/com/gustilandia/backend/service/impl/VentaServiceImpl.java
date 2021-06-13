@@ -174,7 +174,7 @@ public class VentaServiceImpl implements VentaService{
 		if(idRol == 5)
 		{
 			listadoVentas = listadoVentas.stream()
-										.filter(venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdUsuario() == idUsuario)
+										.filter(venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdEmpleado() == idUsuario)
 										.collect(Collectors.toList());
 		}
 
@@ -231,6 +231,7 @@ public class VentaServiceImpl implements VentaService{
 			ventarepo.cambiarEstadoVenta(dtoVentaEstado.getIdVenta(), dtoVentaEstado.getIdRepartidor(), dtoVentaEstado.getIdEstado());
 			Venta venta = ventarepo.findById(dtoVentaEstado.getIdVenta()).get();
 			response.setResult(venta);
+			response.setMessage("Se ha actualizado el estado de la venta.");
 			response.setSuccess(true);
 
 		} catch (Exception e) {

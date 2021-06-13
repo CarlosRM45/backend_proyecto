@@ -30,7 +30,7 @@ public class Venta {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_repartidor")
-	private Usuario repartidor;
+	private Empleado repartidor;
 	
 	@Column(name = "correlativo_comprobante")
 	private String correlativoComprobante;
@@ -79,14 +79,11 @@ public class Venta {
 	private List<VentaDetalle> ventaDetalle;
 
 
-
-
-	
-	public Usuario getRepartidor() {
+	public Empleado getRepartidor() {
 		return repartidor;
 	}
 
-	public void setRepartidor(Usuario repartidor) {
+	public void setRepartidor(Empleado repartidor) {
 		this.repartidor = repartidor;
 	}
 
