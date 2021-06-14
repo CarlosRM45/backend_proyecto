@@ -72,7 +72,7 @@ public class CompraServiceImpl implements CompraService{
 			
 			cambiarStock(compra.getCompraDetalle(), true);
 			
-			response.setResult(true);
+			response.setSuccess(true);
 			response.setMessage("La compra fue registrada exitosamente");
 			response.setResult(compra);
 			
