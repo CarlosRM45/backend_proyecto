@@ -24,5 +24,8 @@ public interface VentaRepository extends JpaRepository<Venta, Long>{
     @Modifying(clearAutomatically = true)
     @Query(value = "update venta set id_estado = 5 where id_venta =:id",nativeQuery = true)
     int anular(@Param("id") Long id);
+    
+    @Query(value = "select max(correlativo_comprobante) from venta where id_tipo_comprobante_sunat =:id", nativeQuery = true)
+    int correlativo(@Param("id") Long id);
 
 }

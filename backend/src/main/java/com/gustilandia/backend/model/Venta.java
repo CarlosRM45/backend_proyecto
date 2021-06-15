@@ -26,14 +26,14 @@ public class Venta {
 	private Long idVenta;
 	
 	@Column(name = "numero_venta")
-	private int numeroVenta;
+	private String numeroVenta;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_repartidor")
 	private Empleado repartidor;
 	
 	@Column(name = "correlativo_comprobante")
-	private String correlativoComprobante;
+	private int correlativoComprobante;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_cliente")
@@ -119,28 +119,28 @@ public class Venta {
 		this.idVenta = idVenta;
 	}
 
-	public int getNroVenta() {
+	public String getNumeroVenta() {
 		return numeroVenta;
 	}
 
-	public void setNroVenta(int numeroVenta) {
+	public void setNumeroVenta(String numeroVenta) {
 		this.numeroVenta = numeroVenta;
 	}
 
-	// public Long getIdTipoComprobanteSunat() {
-	// 	return idTipoComprobanteSunat;
-	// }
-
-	// public void setIdTipoComprobanteSunat(Long idTipoComprobanteSunat) {
-	// 	this.idTipoComprobanteSunat = idTipoComprobanteSunat;
-	// }
-
-	public String getCorrelativoComprobante() {
+	public int getCorrelativoComprobante() {
 		return correlativoComprobante;
 	}
 
-	public void setCorrelativoComprobante(String correlativoComprobante) {
+	public void setCorrelativoComprobante(int correlativoComprobante) {
 		this.correlativoComprobante = correlativoComprobante;
+	}
+
+	public Date getFechaEntrega() {
+		return fechaEntrega;
+	}
+
+	public void setFechaEntrega(Date fechaEntrega) {
+		this.fechaEntrega = fechaEntrega;
 	}
 
 	public Cliente getCliente() {

@@ -12,14 +12,9 @@ public class DTOVentas implements Serializable{
 	
 	private Long idVenta;
 	
-	@NotNull(message = "Debe ingresar un numero de Venta")
-	private int nroVenta;
-	
 	@NotNull(message = "Seleccione un tipo de comprobante")
 	@Min(value = 1, message = "Seleccione un tipo de comprobante")
 	private Long idTipoComprobanteSunat;
-	
-	private String correlativoComprobante;
 	
 	private DTOTarjeta tarjeta;
 	
@@ -29,13 +24,11 @@ public class DTOVentas implements Serializable{
 	}
 	
 
-	public DTOVentas(Long idVenta, @NotNull(message = "Debe ingresar un numero de Venta") int nroVenta,
+	public DTOVentas(Long idVenta,
 			@NotNull(message = "Seleccione un tipo de comprobante") @Min(value = 1, message = "Seleccione un tipo de comprobante") Long idTipoComprobanteSunat,
-			String correlativoComprobante, DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
+			 DTOTarjeta tarjeta, List<DTODetalleVenta> detalleVenta) {
 		this.idVenta = idVenta;
-		this.nroVenta = nroVenta;
 		this.idTipoComprobanteSunat = idTipoComprobanteSunat;
-		this.correlativoComprobante = correlativoComprobante;
 		this.tarjeta = tarjeta;
 		this.detalleVenta = detalleVenta;
 	}
@@ -55,23 +48,11 @@ public class DTOVentas implements Serializable{
 	public void setDetalleVenta(List<DTODetalleVenta> detalleVenta) {
 		this.detalleVenta = detalleVenta;
 	}
-	public int getNroVenta() {
-		return nroVenta;
-	}
-	public void setNroVenta(int nroVenta) {
-		this.nroVenta = nroVenta;
-	}
 	public Long getIdTipoComprobanteSunat() {
 		return idTipoComprobanteSunat;
 	}
 	public void setIdTipoComprobanteSunat(Long idTipoComprobanteSunat) {
 		this.idTipoComprobanteSunat = idTipoComprobanteSunat;
-	}
-	public String getCorrelativoComprobante() {
-		return correlativoComprobante;
-	}
-	public void setCorrelativoComprobante(String correlativoComprobante) {
-		this.correlativoComprobante = correlativoComprobante;
 	}
 	public DTOTarjeta getTarjeta() {
 		return tarjeta;

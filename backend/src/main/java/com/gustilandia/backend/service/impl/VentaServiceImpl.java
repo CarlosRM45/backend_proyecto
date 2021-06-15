@@ -27,6 +27,7 @@ import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.model.VentaDetalle;
 import com.gustilandia.backend.repository.ClienteRepository;
 import com.gustilandia.backend.repository.ProductoRepository;
+import com.gustilandia.backend.repository.TipoComprobanteSunatRepository;
 import com.gustilandia.backend.repository.VentaRepository;
 import com.gustilandia.backend.security.JwtProvider;
 import com.gustilandia.backend.security.TokenClientInterceptor;
@@ -50,6 +51,9 @@ public class VentaServiceImpl implements VentaService{
 	
 	@Autowired
 	private ClienteRepository clienterepo;
+	
+	@Autowired
+	private TipoComprobanteSunatRepository tipocomprobanterepo;
 
 	@Transactional
 	@Override
@@ -87,7 +91,10 @@ public class VentaServiceImpl implements VentaService{
 			
 			venta.setSubtotal(subtotal);
 			venta.setIgv(subtotal * 0.18);
-			venta.setTotal(venta.getSubtotal() + venta.getIgv());		
+			venta.setTotal(venta.getSubtotal() + venta.getIgv());
+			
+			venta.setCorrelativoComprobante(ventarepo.correlativo(venta.getTipoComprobanteSunat().getIdTipoComprobanteSunat()) + 1);
+			venta.setNumeroVenta(tipocomprobanterepo.findById(venta.getTipoComprobanteSunat().getIdTipoComprobanteSunat()).get().getSerie() + " - " + String.format("%06d", venta.getCorrelativoComprobante()));
 			
 			venta = ventarepo.save(venta);
 			
@@ -104,7 +111,7 @@ public class VentaServiceImpl implements VentaService{
 	@Override
 	public Response actualizar(DTOVentas dtoVenta) {
 		Response response = new Response();
-		Venta venta = mappingDtoVenta(dtoVenta);
+		/*Venta venta = mappingDtoVenta(dtoVenta);
 		try {
 			Optional<Venta> ventaOpt = ventarepo.findById(venta.getIdVenta());
 			Venta _venta = ventaOpt.get();
@@ -120,7 +127,7 @@ public class VentaServiceImpl implements VentaService{
 			response.setMessage("Venta actualizada correctamente");
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al actualizar la venta: " + e.getMessage());
-		}
+		}*/
 		return response;
 	}
 
