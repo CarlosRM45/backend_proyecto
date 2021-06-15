@@ -11,13 +11,17 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.gustilandia.backend.dto.DTOCliente;
+import com.gustilandia.backend.dto.DTODireccion;
 import com.gustilandia.backend.model.Cliente;
 import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Rol;
 import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.repository.ClienteRepository;
+import com.gustilandia.backend.repository.DistritoRepository;
 import com.gustilandia.backend.repository.RolRepository;
 import com.gustilandia.backend.repository.UsuarioRepository;
+import com.gustilandia.backend.security.JwtProvider;
+import com.gustilandia.backend.security.TokenClientInterceptor;
 import com.gustilandia.backend.service.ClienteService;
 import com.gustilandia.backend.service.Response;
 
@@ -37,7 +41,13 @@ public class ClienteServiceImpl implements ClienteService{
 	private UsuarioRepository repousuario;
 	
 	@Autowired
+	private JwtProvider jwtProvider;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private DistritoRepository repodistrito;
 
 	@Override
 	public Response registrar(DTOCliente clienteDto) {
@@ -175,6 +185,36 @@ public class ClienteServiceImpl implements ClienteService{
 		}
 		
 		return cliente;
+	}
+
+	@Override
+	public Response actualizarDireccion(DTODireccion dtoDireccion) {
+		
+		Response response = new Response();
+		
+		try {
+			String token = TokenClientInterceptor.token;
+			token = token.replace("Bearer ", "");
+			String correo = jwtProvider.getUsuarioToken(token);
+			Cliente cliente = repocliente.findByCorreo(correo).get();
+			
+			cliente.setDistrito(repodistrito.findById(dtoDireccion.getIdDistrito()).get());
+			cliente.setDireccion(dtoDireccion.getDireccion());
+			cliente.setReferencia(dtoDireccion.getReferencia());
+			
+			cliente = repocliente.save(cliente);
+			
+			response.setSuccess(true);
+			response.setMessage("Direccion actualizada exitosamente");
+			response.setResult(cliente);
+			
+		} catch (Exception e) {
+			response.setSuccess(false);
+			response.setMessage("Error al actualizar la direccion");
+		}
+
+		
+		return response;
 	}
 
 }

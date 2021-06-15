@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gustilandia.backend.dto.DTOCliente;
+import com.gustilandia.backend.dto.DTODireccion;
 import com.gustilandia.backend.dto.DTOJwt;
 import com.gustilandia.backend.dto.DTOLogin;
 import com.gustilandia.backend.security.TokenClientInterceptor;
@@ -90,6 +91,13 @@ public class ClienteController {
 			return new ResponseEntity<>(new Response(false, null, "El cliente no existe"),HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<Response>(service.eliminar(id), HttpStatus.OK);
+		
+	}
+	
+	@PutMapping(value = "/direccion" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response> actualizarDireccion(@RequestBody DTODireccion dtoDireccion) {
+		
+		return new ResponseEntity<Response>(service.actualizarDireccion(dtoDireccion), HttpStatus.OK);	
 		
 	}
 
