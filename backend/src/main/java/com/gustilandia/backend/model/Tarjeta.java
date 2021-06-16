@@ -14,20 +14,20 @@ import javax.persistence.ManyToOne;
 @Entity
 @Table(name = "tarjeta")
 public class Tarjeta {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idTarjeta;
-	
+
 	@Column(name = "nro_tarjeta")
 	private String nroTarjeta;
-	
+
 	@Column(name = "cvv")
 	private Long cvv;
-	
+
 	@Column(name = "fecha_vencimiento")
-	private Date fechaVencimiento;
-	
+	private String fechaVencimiento;
+
 	@Column(name = "correo")
 	private String correo;
 
@@ -59,11 +59,11 @@ public class Tarjeta {
 		this.cvv = cvv;
 	}
 
-	public Date getFechaVencimiento() {
+	public String getFechaVencimiento() {
 		return fechaVencimiento;
 	}
 
-	public void setFechaVencimiento(Date fechaVencimiento) {
+	public void setFechaVencimiento(String fechaVencimiento) {
 		this.fechaVencimiento = fechaVencimiento;
 	}
 
@@ -74,7 +74,5 @@ public class Tarjeta {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-	
-	
 
 }

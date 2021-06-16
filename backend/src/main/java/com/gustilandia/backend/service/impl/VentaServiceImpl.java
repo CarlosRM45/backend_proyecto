@@ -35,121 +35,120 @@ import com.gustilandia.backend.service.Response;
 import com.gustilandia.backend.service.VentaService;
 
 @Service
-public class VentaServiceImpl implements VentaService{
-	
+public class VentaServiceImpl implements VentaService {
+
 	@Autowired
 	private VentaRepository ventarepo;
-	
+
 	@Autowired
 	private ProductoRepository productorepo;
-	
+
 	@Autowired
 	private ModelMapper mapper;
-	
+
 	@Autowired
 	private JwtProvider jwtProvider;
-	
+
 	@Autowired
 	private ClienteRepository clienterepo;
-	
+
 	@Autowired
 	private TipoComprobanteSunatRepository tipocomprobanterepo;
 
 	@Transactional
 	@Override
 	public Response registrar(DTOVentas dtoVenta) {
-		
+
 		Response response = new Response();
 		Venta venta = mappingDtoVenta(dtoVenta);
 		boolean stock = true;
 		List<String> errorStock = new ArrayList<String>();
-		
+
 		try {
-			
+
 			double subtotal = 0.0;
-			
+
 			double dettotal = 0.0;
-			
-			for(VentaDetalle det:venta.getVentaDetalle()) {
+
+			for (VentaDetalle det : venta.getVentaDetalle()) {
 				Producto producto = productorepo.findById(det.getProducto().getIdProducto()).get();
 				det.setVenta(venta);
 				det.setProducto(producto);
 				det.setPrecio(det.getProducto().getPrecio());
 				dettotal = det.getPrecio() * det.getCantidad();
 				subtotal += dettotal;
-				if(det.getCantidad()>producto.getStock()) {
+				if (det.getCantidad() > producto.getStock()) {
 					stock = false;
 					errorStock.add("No hay suficiente Stock de " + producto.getProducto());
 				}
 			}
-			
-			if(!stock) {
+
+			if (!stock) {
 				return new Response(false, errorStock, "No hay suficiente stock de algunos productos");
-			}else {
+			} else {
 				cambiarStock(venta.getVentaDetalle(), false);
 			}
-			
+
 			venta.setSubtotal(subtotal);
 			venta.setIgv(subtotal * 0.18);
 			venta.setTotal(venta.getSubtotal() + venta.getIgv());
-			
-			venta.setCorrelativoComprobante(ventarepo.correlativo(venta.getTipoComprobanteSunat().getIdTipoComprobanteSunat()) + 1);
-			venta.setNumeroVenta(tipocomprobanterepo.findById(venta.getTipoComprobanteSunat().getIdTipoComprobanteSunat()).get().getSerie() + " - " + String.format("%06d", venta.getCorrelativoComprobante()));
-			
+
+			venta.setCorrelativoComprobante(
+					ventarepo.correlativo(venta.getTipoComprobanteSunat().getIdTipoComprobanteSunat()) + 1);
+			venta.setNumeroVenta(
+					tipocomprobanterepo.findById(venta.getTipoComprobanteSunat().getIdTipoComprobanteSunat()).get()
+							.getSerie() + " - " + String.format("%06d", venta.getCorrelativoComprobante()));
+
 			venta = ventarepo.save(venta);
-			
+
 			response.setResult(venta);
 			response.setSuccess(true);
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al registrar la venta: " + e.getMessage());
 		}
-		
-		
+
 		return response;
 	}
 
 	@Override
 	public Response actualizar(DTOVentas dtoVenta) {
 		Response response = new Response();
-		/*Venta venta = mappingDtoVenta(dtoVenta);
-		try {
-			Optional<Venta> ventaOpt = ventarepo.findById(venta.getIdVenta());
-			Venta _venta = ventaOpt.get();
-			_venta.setNroVenta(venta.getNroVenta());
-			//_venta.setIdTipoComprobanteSunat(venta.getIdTipoComprobanteSunat());
-			_venta.setCorrelativoComprobante(venta.getCorrelativoComprobante());
-			_venta.setCliente(venta.getCliente());
-			_venta.setTarjeta(venta.getTarjeta());
-			_venta.setVentaDetalle(venta.getVentaDetalle());
-			
-			response.setResult(ventarepo.save(_venta));
-			response.setSuccess(true);
-			response.setMessage("Venta actualizada correctamente");
-		} catch (Exception e) {
-			response.setMessage("Hubo un error al actualizar la venta: " + e.getMessage());
-		}*/
+		/*
+		 * Venta venta = mappingDtoVenta(dtoVenta); try { Optional<Venta> ventaOpt =
+		 * ventarepo.findById(venta.getIdVenta()); Venta _venta = ventaOpt.get();
+		 * _venta.setNroVenta(venta.getNroVenta());
+		 * //_venta.setIdTipoComprobanteSunat(venta.getIdTipoComprobanteSunat());
+		 * _venta.setCorrelativoComprobante(venta.getCorrelativoComprobante());
+		 * _venta.setCliente(venta.getCliente()); _venta.setTarjeta(venta.getTarjeta());
+		 * _venta.setVentaDetalle(venta.getVentaDetalle());
+		 * 
+		 * response.setResult(ventarepo.save(_venta)); response.setSuccess(true);
+		 * response.setMessage("Venta actualizada correctamente"); } catch (Exception e)
+		 * { response.setMessage("Hubo un error al actualizar la venta: " +
+		 * e.getMessage()); }
+		 */
 		return response;
 	}
 
 	@Override
 	public Response eliminar(Long id) {
-		
+
 		Response response = new Response();
-		
+
 		try {
 			Optional<Venta> ventaOpt = ventarepo.findById(id);
-			
-			if(ventaOpt != null) {
+
+			if (ventaOpt != null) {
 				Venta venta = ventaOpt.get();
-				//venta.setIdEstado(2L);
+				// venta.setIdEstado(2L);
 				ventarepo.save(venta);
-				
+
 				response.setSuccess(true);
 				response.setMessage("La venta ha sido eliminada");
-			}else {
+			} else {
 				response.setMessage("La venta no existe");
 			}
-			
+
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al eliminar la venta: " + e.getMessage());
 		}
@@ -162,27 +161,27 @@ public class VentaServiceImpl implements VentaService{
 		Response response = new Response();
 
 		try {
-			
+
 			Optional<Venta> optVenta = ventarepo.findById(id);
-			if(!optVenta.isPresent()) 
+			if (!optVenta.isPresent())
 				return new Response(false, null, "No existe venta con el id: " + id);
-			
+
 			ventarepo.anular(id);
 			response.setSuccess(true);
 			response.setMessage("La venta fue anulada.");
-			
+
 			cambiarStock(optVenta.get().getVentaDetalle(), true);
 
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al anular la venta: " + e.getMessage());
 		}
-		
+
 		return response;
 	}
 
 	@Override
 	public Response buscarId(Long id) {
-		
+
 		Venta venta = ventarepo.findById(id).get();
 		return new Response(true, venta, "");
 	}
@@ -195,21 +194,17 @@ public class VentaServiceImpl implements VentaService{
 	@Override
 	public Response listarVentasPorRol(Long idRol, Long idUsuario) {
 
-		
 		List<Venta> listadoVentas = ventarepo.findAll();
 
-		if(idRol == 2)
-		{
-			listadoVentas = listadoVentas.stream()
-										.filter(venta -> venta.getEstado().getIdEstado() == 6)
-										.collect(Collectors.toList());
+		if (idRol == 2) {
+			listadoVentas = listadoVentas.stream().filter(venta -> venta.getEstado().getIdEstado() == 6)
+					.collect(Collectors.toList());
 		}
 
-		if(idRol == 5)
-		{
-			listadoVentas = listadoVentas.stream()
-										.filter(venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdEmpleado() == idUsuario)
-										.collect(Collectors.toList());
+		if (idRol == 5) {
+			listadoVentas = listadoVentas.stream().filter(
+					venta -> venta.getEstado().getIdEstado() == 7 && venta.getRepartidor().getIdEmpleado() == idUsuario)
+					.collect(Collectors.toList());
 		}
 
 		return new Response(true, listadoVentas, "");
@@ -217,12 +212,13 @@ public class VentaServiceImpl implements VentaService{
 
 	@Override
 	public Response insertVentaCarrito(DTOVentaCarrito dtoVentaCarrito) {
-		
+
 		Response response = new Response();
 
 		try {
-			
-			Long idVenta = ventarepo.insertVentaCarrito(dtoVentaCarrito.getIdCliente(), dtoVentaCarrito.getIdProducto());
+
+			Long idVenta = ventarepo.insertVentaCarrito(dtoVentaCarrito.getIdCliente(),
+					dtoVentaCarrito.getIdProducto());
 
 			response.setResult(idVenta);
 			response.setSuccess(true);
@@ -234,16 +230,15 @@ public class VentaServiceImpl implements VentaService{
 		return response;
 	}
 
-	
-
 	@Override
 	public Response aumentarCantidadProducto(DTOVentaCarrito dtoVentaCarrito) {
-		
+
 		Response response = new Response();
 
 		try {
-			
-			Long idVenta = ventarepo.aumentarCantidadProducto(dtoVentaCarrito.getIdCliente(), dtoVentaCarrito.getIdProducto(), dtoVentaCarrito.getCantidad());
+
+			Long idVenta = ventarepo.aumentarCantidadProducto(dtoVentaCarrito.getIdCliente(),
+					dtoVentaCarrito.getIdProducto(), dtoVentaCarrito.getCantidad());
 
 			response.setResult(idVenta);
 			response.setSuccess(true);
@@ -257,12 +252,13 @@ public class VentaServiceImpl implements VentaService{
 
 	@Override
 	public Response cambiarEstadoVenta(DTOVentaEstado dtoVentaEstado) {
-		
+
 		Response response = new Response();
 
 		try {
-			
-			ventarepo.cambiarEstadoVenta(dtoVentaEstado.getIdVenta(), dtoVentaEstado.getIdRepartidor(), dtoVentaEstado.getIdEstado());
+
+			ventarepo.cambiarEstadoVenta(dtoVentaEstado.getIdVenta(), dtoVentaEstado.getIdRepartidor(),
+					dtoVentaEstado.getIdEstado());
 			Venta venta = ventarepo.findById(dtoVentaEstado.getIdVenta()).get();
 			response.setResult(venta);
 			response.setMessage("Se ha actualizado el estado de la venta.");
@@ -274,64 +270,62 @@ public class VentaServiceImpl implements VentaService{
 
 		return response;
 	}
-	
+
 	public Venta mappingDtoVenta(DTOVentas dtoVenta) {
-		
+
 		Venta venta = mapper.map(dtoVenta, Venta.class);
-		
+
 		Estado estado = new Estado();
 		estado.setIdEstado(4L);
-		
+
 		TipoComprobanteSunat tipoComprobanteSunat = new TipoComprobanteSunat();
 		tipoComprobanteSunat.setIdTipoComprobanteSunat(dtoVenta.getIdTipoComprobanteSunat());
-		
+
 		venta.setTipoComprobanteSunat(tipoComprobanteSunat);
 		venta.setEstado(estado);
 		venta.setFechaVentaGuardada(new Date(System.currentTimeMillis()));
-		
+
 		String token = TokenClientInterceptor.token;
 		token = token.replace("Bearer ", "");
 		String correo = jwtProvider.getUsuarioToken(token);
 		Cliente cliente = clienterepo.findByCorreo(correo).get();
-		
+
 		venta.setCliente(cliente);
 
 		return venta;
-		
-	}
-	
-	public VentaDetalle mappginDtoDetalle(DTODetalleVenta dtoDetalle) {
-		
-		VentaDetalle detalle = mapper.map(dtoDetalle, VentaDetalle.class);
-		return detalle;
-		
-	}
-	
-	public Tarjeta mappingDtoTarjeta(DTOTarjeta dtoTarjeta) {
-		
-		Tarjeta tarjeta = mapper.map(dtoTarjeta, Tarjeta.class);
-		return tarjeta;
-		
+
 	}
 
-	
+	public VentaDetalle mappginDtoDetalle(DTODetalleVenta dtoDetalle) {
+
+		VentaDetalle detalle = mapper.map(dtoDetalle, VentaDetalle.class);
+		return detalle;
+
+	}
+
+	public Tarjeta mappingDtoTarjeta(DTOTarjeta dtoTarjeta) {
+
+		Tarjeta tarjeta = mapper.map(dtoTarjeta, Tarjeta.class);
+		return tarjeta;
+
+	}
+
 	public void cambiarStock(List<VentaDetalle> listado, boolean aumentar) {
-		
-		if(!aumentar) {
+
+		if (!aumentar) {
 			for (VentaDetalle detalle : listado) {
 				Producto prod = productorepo.findById(detalle.getProducto().getIdProducto()).get();
 				prod.setStock(prod.getStock() - detalle.getCantidad());
 				productorepo.save(prod);
 			}
-		}else {
+		} else {
 			for (VentaDetalle detalle : listado) {
 				Producto prod = productorepo.findById(detalle.getProducto().getIdProducto()).get();
 				prod.setStock(prod.getStock() + detalle.getCantidad());
 				productorepo.save(prod);
 			}
 		}
-		
+
 	}
-	
 
 }
