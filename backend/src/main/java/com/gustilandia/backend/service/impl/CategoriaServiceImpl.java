@@ -38,6 +38,12 @@ public class CategoriaServiceImpl implements CategoriaService{
 		Response response = new Response();
 		
 		try {
+
+			if(repository.existsByCategoria(categoria.getCategoria())) {
+				response.setMessage("Ya existe una categoria con esa descripcion");
+				return response;
+			}
+
 			Categoria _categoria = mappingDtoCategoria(categoria);
 			response.setResult(repository.save(_categoria));
 			response.setSuccess(true);

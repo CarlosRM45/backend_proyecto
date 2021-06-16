@@ -38,6 +38,12 @@ public class MarcaServiceImpl implements MarcaService{
 		Response response = new Response();
 		
 		try {
+
+			if(repository.existsByNombreMarca(marca.getNombreMarca())) {
+				response.setMessage("Ya existe una marca con esa descripcion");
+				return response;
+			}
+
 			Marca _marca = mappingMarca(marca);
 			response.setResult(repository.save(_marca));
 			response.setSuccess(true);

@@ -15,4 +15,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long>{
     @Query(value = "update proveedor set id_estado = 2 where id_proveedor =:id",nativeQuery = true)
     int deleteProveedor (@Param("id") Long id);
 
+    boolean existsByNumeroDocumentoIdentidad(String numeroDocumentoIdentidad);
+
 }

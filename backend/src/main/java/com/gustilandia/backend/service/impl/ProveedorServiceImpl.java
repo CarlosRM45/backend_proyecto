@@ -42,11 +42,18 @@ public class ProveedorServiceImpl implements ProveedorService{
 		Proveedor proveedor = mappingProveedor(dtoProveedor);
 		
 		try {
+
+			if(repository.existsByNumeroDocumentoIdentidad(dtoProveedor.getNumeroDocumentoIdentidad())) {
+				response.setMessage("Ya existe un proveedo con ese ruc.");
+				return response;
+			}
+
 			proveedor = repository.save(proveedor);
 			response.setSuccess(true);
 			response.setResult(proveedor);
 			response.setMessage("Proveedor guardado exitosamente");
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			response.setMessage("Hubo un error al guardar el proveedor");
 			response.setSuccess(false);
 		}

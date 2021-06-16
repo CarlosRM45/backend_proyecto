@@ -1,6 +1,7 @@
 package com.gustilandia.backend.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,6 @@ import com.gustilandia.backend.model.Estado;
 import com.gustilandia.backend.model.Producto;
 import com.gustilandia.backend.model.Tarjeta;
 import com.gustilandia.backend.model.TipoComprobanteSunat;
-import com.gustilandia.backend.model.Usuario;
 import com.gustilandia.backend.model.Venta;
 import com.gustilandia.backend.model.VentaDetalle;
 import com.gustilandia.backend.repository.ClienteRepository;
@@ -284,6 +284,13 @@ public class VentaServiceImpl implements VentaService {
 		venta.setTipoComprobanteSunat(tipoComprobanteSunat);
 		venta.setEstado(estado);
 		venta.setFechaVentaGuardada(new Date(System.currentTimeMillis()));
+		venta.setFechaCreacion(new Date(System.currentTimeMillis()));
+
+		Date dt = new Date();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(dt); 
+		c.add(Calendar.DATE, 7);
+		venta.setFechEntrega(c.getTime());
 
 		String token = TokenClientInterceptor.token;
 		token = token.replace("Bearer ", "");

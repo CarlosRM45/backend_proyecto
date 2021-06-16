@@ -13,4 +13,6 @@ public interface MarcaRepository extends JpaRepository<Marca, Long>{
     @Modifying(clearAutomatically = true)
     @Query(value = "update marca set id_estado = 2 where id_marca =:id",nativeQuery = true)
     int deleteMarca(@Param("id") Long id);
+
+    boolean existsByNombreMarca(String nombreMarca);
 }
