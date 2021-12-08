@@ -70,7 +70,7 @@ public class CompraServiceImpl implements CompraService{
 			
 			compra = repocompra.save(compra);
 			
-			cambiarStock(compra.getCompraDetalle(), true);
+			//cambiarStock(compra.getCompraDetalle(), true);
 			
 			response.setSuccess(true);
 			response.setMessage("La compra fue registrada exitosamente");
@@ -117,7 +117,7 @@ public class CompraServiceImpl implements CompraService{
 			response.setSuccess(true);
 			response.setMessage("La compra fue anulada");
 			
-			cambiarStock(optCompra.get().getCompraDetalle(), false);
+			//cambiarStock(optCompra.get().getCompraDetalle(), false);
 			
 		} catch (Exception e) {
 			response.setMessage("Hubo un error al anular la venta: " + e.getMessage());
@@ -170,7 +170,7 @@ public class CompraServiceImpl implements CompraService{
 		return compra;
 	}
 	
-	public void cambiarStock(List<CompraDetalle> listado, boolean aumentar) {
+	/*public void cambiarStock(List<CompraDetalle> listado, boolean aumentar) {
 		
 		if(!aumentar) {
 			for (CompraDetalle detalle : listado) {
@@ -185,5 +185,5 @@ public class CompraServiceImpl implements CompraService{
 				productorepo.save(prod);
 			}
 		}
-	}
+	}*/
 }

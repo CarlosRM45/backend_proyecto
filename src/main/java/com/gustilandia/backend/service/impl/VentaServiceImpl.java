@@ -335,11 +335,11 @@ public class VentaServiceImpl implements VentaService {
 				//ventarepo.actualizarStock(detalle.getCantidad(), detalle.getProducto().getIdProducto());
 			}
 		} else {
-			for (VentaDetalle detalle : listado) {
+			/*for (VentaDetalle detalle : listado) {
 				Producto prod = productorepo.findById(detalle.getProducto().getIdProducto()).get();
 				prod.setStock(prod.getStock() + detalle.getCantidad());
 				productorepo.save(prod);
-			}
+			}*/
 		}
 
 	}

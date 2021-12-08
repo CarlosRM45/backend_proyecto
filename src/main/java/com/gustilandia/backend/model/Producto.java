@@ -44,9 +44,6 @@ public class Producto {
 	@JoinColumn(name = "id_marca")
 	private Marca marca;
 	
-	@Column(name = "stock")
-	private int stock;
-	
 	@ManyToOne
 	@JoinColumn(name = "id_unidad_medida", nullable = false)
 	private UnidadMedida unidadMedida;
@@ -127,14 +124,6 @@ public class Producto {
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}
-
-	public int getStock() {
-		return stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
 	}
 
 	public UnidadMedida getUnidadMedida() {

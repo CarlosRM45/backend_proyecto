@@ -111,7 +111,6 @@ public class ProductoServiceImpl implements ProductoService{
 			_producto.setPrecio(producto.getPrecio());
 			_producto.setCategoria(producto.getCategoria());
 			_producto.setMarca(producto.getMarca());
-			_producto.setStock(producto.getStock());
 			_producto.setUnidadMedida(producto.getUnidadMedida());
 			_producto.setUsuarioEdita(producto.getUsuarioEdita());
 			_producto.setFechaEdita(producto.getFechaEdita());
@@ -182,9 +181,9 @@ public class ProductoServiceImpl implements ProductoService{
 		
 		Producto _producto = producto.get();
 		
-		if(_producto.getStock()<cantidad)
+		/*if(_producto.getStock()<cantidad)
 			return new Response(false, null, "No hay stock suficiente del producto");
-		
+		*/
 		return new Response(true, null, "");
 	}
 
